@@ -31,4 +31,13 @@ interface Kernel {
      */
     public function getInstance($className, $annotation = null);
 
+    /**
+     * Installs an additional module.
+     *
+     * @abstract
+     * @param Module $module
+     * @return void
+     */
+    public function install(Module $module);
+
 }

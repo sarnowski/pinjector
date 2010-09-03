@@ -55,6 +55,9 @@ class DefaultBinder implements Binder {
     }
 
     public function install(Module $module) {
+        if ($module == null) {
+            throw new ConfigurationException("module is null");
+        }
         $module->configure($this);
     }
 

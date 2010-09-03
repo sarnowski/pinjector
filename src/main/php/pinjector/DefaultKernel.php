@@ -20,6 +20,7 @@ require_once('Binding.php');
 require_once('DefaultBinder.php');
 require_once('DefaultBinding.php');
 require_once('DefaultProxy.php');
+require_once('DocParser.php');
 require_once('Kernel.php');
 require_once('KernelException.php');
 require_once('Module.php');
@@ -199,5 +200,9 @@ class DefaultKernel implements Kernel {
         }
 
         return $defs;
+    }
+
+    public function install(Module $module) {
+        $this->binder->install($module);
     }
 }
