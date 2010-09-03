@@ -24,6 +24,7 @@ class DefaultKernel implements Kernel {
      */
     public static function boot(Module $applicationModule) {
         $kernel = new DefaultKernel();
+        $kernel->getBinder()->bind('Kernel')->toInstance($kernel); // bind the kernel itself
         $kernel->getBinder()->install($applicationModule);
         return $kernel;
     }
@@ -48,22 +49,34 @@ class DefaultKernel implements Kernel {
         return $this->binder;
     }
 
-    public function getInstance($className) {
-        $binding = $this->binder->getBinding($className);
+    public function getInstance($className, $annotation = null) {
+        $binding = $this->binder->getBinding($className, $annotation);
         if (is_null($binding)) {
             throw new KernelException("class binding not found");
         }
 
         // initialize if nessecary
-        if (is_null($binding->getSourceInstance())) {
-            $this->initializeBinding($binding);
+        $scope = $binding->getScope();
+        if (is_null($scope)) {
+            $instance = $this->newInstance($binding);
+        } else {
+            $scopeKey = $binding->getKey();
+            $instance = $scope->getScope($scopeKey);
+            if (is_null($instance)) {
+                $instance = $this->newInstance($binding);
+                $scope->putScope($scopeKey, $instance);
+            }
         }
 
         // return the proxied instance
-        return new DefaultProxy($binding->getSourceInstance(), $this);
+        return new DefaultProxy($instance, $this);
     }
 
-    private function initializeBinding(DefaultBinding $binding) {
+    private function newInstance(DefaultBinding $binding) {
+        if (!is_null($binding->getSourceInstance())) {
+            return $binding->getSourceInstance();
+        }
+
         // ok, let's do our magic
         $sourceClass = $binding->getSourceClassName();
         if (is_null($sourceClass)) {
@@ -87,7 +100,7 @@ class DefaultKernel implements Kernel {
 
                 foreach ($injectionDefs as $def) {
                     if ($def['name'] == '$'.$name) {
-                        $dependency = $this->getInstance($def['class']);
+                        $dependency = $this->getInstance($def['class'], $def['annotation']);
                     }
                 }
 
@@ -104,9 +117,7 @@ class DefaultKernel implements Kernel {
         } else {
             $instance = $class->newInstanceArgs($parameters);
         }
-
-        // save
-        $binding->setSourceInstance($instance);
+        return $instance;
     }
 
     private function getInjectionDefinitions($method) {
@@ -127,8 +138,14 @@ class DefaultKernel implements Kernel {
                     $def = array(
                         'class' => $value[0],
                         'name' => $value[1],
+                        'annotation' => null
                     );
-                    // TODO use $value[2] for binding keys
+                    if (count($value) >= 3) {
+                        if ($value[2][0] == '!') {
+                            $value = trim($value[2]);
+                            $def['annotation'] = substr($value, 1);
+                        }
+                    }
                     $defs[] = $def;
                 } else {
                     throw new KernelException("unknown @inject parameters");

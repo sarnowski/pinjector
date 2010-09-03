@@ -7,7 +7,13 @@ require_once('Helper.php');
  */ 
 class DefaultHelper implements Helper {
 
+    private $prefix = 'Hello ';
+
+    function setPrefix($prefix) {
+        $this->prefix = $prefix;
+    }
+
     public function generateHello($name) {
-        return "Hello $name";
+        return $this->prefix.$name;
     }
 }

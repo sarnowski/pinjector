@@ -1,6 +1,8 @@
 <?php
 require_once('Binding.php');
 require_once('ConfigurationException.php');
+require_once('DefaultRequestScope.php');
+require_once('DefaultSessionScope.php');
 
 /**
  * 
@@ -8,10 +10,23 @@ require_once('ConfigurationException.php');
  */
 class DefaultBinding implements Binding {
 
+    private static $requestScope;
+    private static $sessionScope;
+
+    static function initializeScopes() {
+        self::$requestScope = new DefaultRequestScope();
+        self::$sessionScope = new DefaultSessionScope();
+    }
+
     /**
      * @var string
      */
     private $targetClassName;
+
+    /**
+     * @var string
+     */
+    private $targetAnnotation;
 
     /**
      * @var string
@@ -23,10 +38,17 @@ class DefaultBinding implements Binding {
      */
     private $sourceInstance;
 
+    /**
+     * @var Scope
+     */
+    private $scope;
+
 
     function __construct($className) {
+        $this->targetAnnotation = null;
         $this->sourceClassName = null;
         $this->sourceInstance = null;
+        $this->scope = null;
 
         $this->targetClassName = $className;
     }
@@ -46,7 +68,6 @@ class DefaultBinding implements Binding {
     public function toInstance($ref) {
         $this->checkAlreadySet();
         $this->sourceInstance = $ref;
-        return $this;
     }
 
     /**
@@ -64,18 +85,63 @@ class DefaultBinding implements Binding {
     }
 
     /**
-     * @param  mixed $sourceInstance
-     * @return void
-     */
-    public function setSourceInstance($sourceInstance) {
-        $this->sourceInstance = $sourceInstance;
-    }
-
-    /**
      * @return string
      */
     public function getTargetClassName() {
         return $this->targetClassName;
     }
 
+    /**
+     * @return string
+     */
+    public function getTargetAnnotation() {
+        return $this->targetAnnotation;
+    }
+
+    public function annotatedWith($annotation) {
+        if (!is_null($this->targetAnnotation)) {
+            throw new ConfigurationException("annotation already set");
+        }
+        $this->targetAnnotation = $annotation;
+        return $this;
+    }
+
+    public function in($scope) {
+        $this->scope = $scope;
+    }
+
+    public function inNoScope() {
+        $this->scope = null;
+    }
+
+    public function inRequestScope() {
+        $this->scope = self::$requestScope;
+    }
+
+    public function inSessionScope() {
+        $this->scope = self::$sessionScope;
+    }
+
+    public function getScope() {
+        return $this->scope;
+    }
+
+    public function getKey() {
+        if ($this->targetAnnotation == null) {
+            return $this->targetClassName;
+        } else {
+            return $this->targetClassName.",".$this->targetAnnotation;
+        }
+    }
+
+    public function __toString() {
+        return '{DefaultBinding'
+                .' targetClassName='.$this->targetClassName
+                .' targetAnnotation='.$this->targetAnnotation
+                .' '
+                .'}';
+    }
 }
+
+// hack: initialize static content
+DefaultBinding::initializeScopes();

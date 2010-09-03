@@ -21,6 +21,10 @@ class DefaultProxy {
     private $kernel;
 
     function __construct($delegate, DefaultKernel $kernel) {
+        if (is_null($delegate)) {
+            throw new KernelException("proxy without delegate created");
+        }
+
         $this->delegate = $delegate;
         $this->kernel = $kernel;
 
@@ -33,6 +37,16 @@ class DefaultProxy {
 
         $method = $this->class->getMethod($methodName);
         return $method->invokeArgs($this->delegate, $params);
+    }
+
+
+    public function getProxiedInstance() {
+        return $this->delegate;
+    }
+
+
+    public function __toString() {
+        return '{DefaultProxy: delegate='.$this->delegate.'}';
     }
 
 }

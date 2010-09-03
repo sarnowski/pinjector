@@ -13,7 +13,7 @@ class DefaultApplication implements Application {
     private $helper;
 
     /**
-     * @param Helper $helper
+     * @param Helper $helper !alternative the alternative helper implementation
      * @return void
      */
     function __construct($helper) {

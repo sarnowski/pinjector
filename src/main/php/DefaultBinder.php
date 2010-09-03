@@ -5,7 +5,7 @@ require_once('DefaultBinding.php');
 require_once('Module.php');
 
 /**
- * 
+ *
  * @author Tobias Sarnowski
  */
 class DefaultBinder implements Binder {
@@ -20,11 +20,19 @@ class DefaultBinder implements Binder {
     }
 
     /**
-     * @param  $className
+     * @param  string $className
+     * @param  string $annotation
      * @return DefaultBinding
      */
-    public function getBinding($className) {
-        return $this->bindings[$className];
+    public function getBinding($className, $annotation = null) {
+        if (isset($this->bindings[$className])) {
+            foreach ($this->bindings[$className] as $binding) {
+                if ($binding->getTargetClassName() == $className && $binding->getTargetAnnotation() == $annotation) {
+                    return $binding;
+                }
+            }
+        }
+        return null;
     }
 
     public function install(Module $module) {
@@ -32,11 +40,15 @@ class DefaultBinder implements Binder {
     }
 
     public function bind($className) {
-        if (isset($this->bindings[$className])) {
-            throw new Exception("target $className already bound");
-        }
         $binding = new DefaultBinding($className);
-        $this->bindings[$className] = $binding;
+        if (!isset($this->bindings[$binding->getTargetClassName()])) {
+            $this->bindings[$binding->getTargetClassName()] = array();
+        }
+        $this->bindings[$binding->getTargetClassName()][] = $binding;
         return $binding;
+    }
+
+    public function __toString() {
+        return '{DefaultBinder binding: '.$this->bindings.'}';
     }
 }

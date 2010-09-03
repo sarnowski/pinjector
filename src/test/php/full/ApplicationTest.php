@@ -14,8 +14,13 @@ class ApplicationTest extends PHPUnit_Framework_TestCase {
         $kernel = DefaultKernel::boot($applicationModule);
 
         $application = $kernel->getInstance('Application');
+        $this->assertNotNull($application, 'Proxy is null');
+        $this->assertNotNull($application->getProxiedInstance(), 'Proxy\'s delegate is null');
+        $this->assertEquals('DefaultApplication', get_class($application->getProxiedInstance()));
+        $this->assertEquals('Hi World', $application->getWelcomeMessage());
 
-        $this->assertEquals('Hello World', $application->getWelcomeMessage());
+        $helper = $kernel->getInstance('Helper');
+        $this->assertEquals('Hello World', $helper->generateHello('World'));
     }
 
 }
