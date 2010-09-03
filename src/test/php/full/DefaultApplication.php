@@ -16,7 +16,7 @@ class DefaultApplication implements Application {
      * @param Helper $helper
      * @return void
      */
-    function __construct(Helper $helper) {
+    function __construct($helper) {
         $this->helper = $helper;
     }
 

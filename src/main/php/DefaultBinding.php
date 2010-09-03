@@ -64,6 +64,14 @@ class DefaultBinding implements Binding {
     }
 
     /**
+     * @param  mixed $sourceInstance
+     * @return void
+     */
+    public function setSourceInstance($sourceInstance) {
+        $this->sourceInstance = $sourceInstance;
+    }
+
+    /**
      * @return string
      */
     public function getTargetClassName() {

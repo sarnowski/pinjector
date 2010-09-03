@@ -54,12 +54,16 @@ class DefaultKernel implements Kernel {
             throw new KernelException("class binding not found");
         }
 
-        // if an instance exists, give it out, we can not do more
-        $instance = $binding->getSourceInstance();
-        if (!is_null($instance)) {
-            return new DefaultProxy($instance, $this);
+        // initialize if nessecary
+        if (is_null($binding->getSourceInstance())) {
+            $this->initializeBinding($binding);
         }
 
+        // return the proxied instance
+        return new DefaultProxy($binding->getSourceInstance(), $this);
+    }
+
+    private function initializeBinding(DefaultBinding $binding) {
         // ok, let's do our magic
         $sourceClass = $binding->getSourceClassName();
         if (is_null($sourceClass)) {
@@ -69,14 +73,69 @@ class DefaultKernel implements Kernel {
         // do the injection magic
         $class = new ReflectionClass($sourceClass);
 
+        // prepare constructor injection
+        $constructor = $class->getConstructor();
+        $parameters = array();
 
-        // TODO
+        if (!empty($constructor)) {
+            $injectionDefs = $this->getInjectionDefinitions($constructor, '@inject');
 
+            // resolve dependencies
+            foreach ($constructor->getParameters() as $parameter) {
+                $name = $parameter->getName();
+                $dependency = null;
+
+                foreach ($injectionDefs as $def) {
+                    if ($def['name'] == '$'.$name) {
+                        $dependency = $this->getInstance($def['class']);
+                    }
+                }
+
+                if ($dependency == null) {
+                    throw new KernelException("Parameter dependency '$name' not defined.");
+                }
+                $parameters[] = $dependency;
+            }
+        }
 
         // instantiate!
-        $instance = $class->newInstanceArgs();
+        if (empty($parameters)) {
+            $instance = $class->newInstanceArgs();
+        } else {
+            $instance = $class->newInstanceArgs($parameters);
+        }
 
-        // wrap with a proxy
-        return new DefaultProxy($instance, $this);
+        // save
+        $binding->setSourceInstance($instance);
+    }
+
+    private function getInjectionDefinitions($method) {
+        $doc = $method->getDocComment();
+        if (empty($doc)) {
+            return array();
+        }
+
+        $defs = array();
+
+        $lines = explode("\n", $doc);
+        foreach ($lines as $line) {
+            $line = trim($line);
+            $match = "* @param ";
+            if (substr($line, 0, strlen($match)) == $match) {
+                $value = explode(' ', trim(substr($line, strlen($match))));
+                if (count($value) >= 2) {
+                    $def = array(
+                        'class' => $value[0],
+                        'name' => $value[1],
+                    );
+                    // TODO use $value[2] for binding keys
+                    $defs[] = $def;
+                } else {
+                    throw new KernelException("unknown @inject parameters");
+                }
+            }
+        }
+
+        return $defs;
     }
 }

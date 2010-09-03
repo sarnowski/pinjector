@@ -3,6 +3,8 @@ require_once('Binder.php');
 require_once('Module.php');
 require_once('Application.php');
 require_once('DefaultApplication.php');
+require_once('DefaultHelper.php');
+require_once('Helper.php');
 
 /**
  *
