@@ -7,6 +7,19 @@
 
     <packaging>php</packaging>
 
+    <developers>
+        <developer>
+            <id>sarnowski</id>
+            <name>Tobias Sarnowski</name>
+            <email>sarnowski@new-thoughts.org</email>
+        </developer>
+    </developers>
+
+    <scm>
+        <connection>scm:git:git://github.com/sarnowski/pinjector.git</connection>
+        <developerConnection>scm:git:git@github.com:sarnowski/pinjector.git</developerConnection>
+    </scm>
+
     <dependencies>
         <dependency>
             <groupId>org.phpunit</groupId>
