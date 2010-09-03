@@ -68,7 +68,6 @@ class DefaultProxy {
                 $interceptors[] = $this->kernel->getInstance($interceptor['class'], $interceptor['annotation']);
             }
         }
-        $interceptors[] = $this;
 
         // now we have all interceptors, start the chain
         $chain = new DefaultInterceptionChain($interceptors, $this->delegate, $method, $params);

@@ -57,9 +57,10 @@ class DefaultInterceptionChain implements InterceptionChain {
     }
 
     public function proceed() {
-        $interceptor = $this->interceptors[$this->index];
-        $this->index++;
-        if ($this->index <= count($interceptor)) {
+        if (isset($this->interceptors[$this->index])) {
+            // another interceptor to call
+            $interceptor = $this->interceptors[$this->index];
+            $this->index++;
             return $interceptor->getProxiedInstance()->intercept($this);
         } else {
             // it's finished
