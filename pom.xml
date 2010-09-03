@@ -10,6 +10,8 @@
     <artifactId>pinjector</artifactId>
     <version>0.1-SNAPSHOT</version>
 
+    <name>pinjector</name>
+
     <packaging>php</packaging>
 
     <developers>
@@ -22,7 +24,29 @@
 
     <scm>
         <connection>scm:git:git://github.com/sarnowski/pinjector.git</connection>
-        <developerConnection>scm:git:git@github.com:sarnowski/pinjector.git</developerConnection>
+        <developerConnection>scm:git:ssh://git@github.com/sarnowski/pinjector.git</developerConnection>
     </scm>
+
+    <distributionManagement>
+        <site>
+            <id>github</id>
+            <name>github.com webspace</name>
+            <url>file://${user.home}/github/pinjector/</url>
+        </site>
+    </distributionManagement>
+
+    <repositories>
+        <repository>
+            <id>sarnowski-github</id>
+            <name>sarnowski.github.com</name>
+            <url>http://sarnowski.github.com/maven2</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
 
 </project>
