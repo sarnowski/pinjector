@@ -10,10 +10,10 @@ Usage
 
 require_once('pinjector/DefaultKernel.php');
 
-$mod = new YouModuleImplementsModule();
+$mod = new YourModuleImplementsModule();
 $kernel = DefaultKernel::boot($mod);
 
-$obj = $kernel->getInstance('MyBoundInterface');
+$obj = $kernel->getInstance('YourBoundInterface');
 
 
 Binding
@@ -28,7 +28,10 @@ class MyModule implements Module {
 
         // normal bindings
         $binder->bind('MyInterface')->to('MyImplementation')->inRequestScope();
-        $binder->bind('MyThirdInterface')->annotatedWith('alternative')->inSessionScope();
+        $binder->bind('MyThirdInterface')
+                ->annotatedWith('alternative')
+                ->to('MyThirdImplementation')
+                ->inSessionScope();
 
         // register interceptor for aop
         $binder->bind('MySecondImplementation')->inRequestScope();
