@@ -2,3 +2,38 @@ pinjector
 ================================================================================
 
 pinjector is a php IoC and AOP library.
+
+
+
+Usage
+================================================================================
+
+require_once('pinjector/DefaultKernel.php');
+
+$mod = new YouModuleImplementsModule();
+$kernel = DefaultKernel::boot($mod);
+
+$obj = $kernel->getInstance('MyBoundInterface');
+
+
+Binding
+================================================================================
+
+require_once('pinjector/Module.php');
+require_once('pinjector/Binder.php');
+
+class MyModule implements Module {
+
+    public function configure(Binder $binder) {
+
+        // normal bindings
+        $binder->bind('MyInterface')->to('MyImplementation')->inRequestScope();
+        $binder->bind('MyThirdInterface')->annotatedWith('alternative')->inSessionScope();
+
+        // register interceptor for aop
+        $binder->bind('MySecondImplementation')->inRequestScope();
+        $binder->interceptWith('MySecondImplementation');
+
+    }
+
+}
