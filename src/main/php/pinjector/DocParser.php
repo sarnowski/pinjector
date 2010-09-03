@@ -15,13 +15,13 @@
  * limitations under the License.
  */
 
-require_once('Interceptor.php');
+
 
 /**
  *
  * @author Tobias Sarnowski
  */ 
-abstract class AbstractInterceptor implements Interceptor {
+class DocParser {
 
     /**
      * Searches for $key in $comment with the following scheme:
@@ -36,7 +36,7 @@ abstract class AbstractInterceptor implements Interceptor {
      * @param  string $key
      * @return array
      */
-    public function parseSettings($comment, $key) {
+    public static function parseSettings($comment, $key) {
         if (empty($comment)) {
             return array();
         }
@@ -63,13 +63,12 @@ abstract class AbstractInterceptor implements Interceptor {
      * @param  string $key
      * @return string
      */
-    public function parseSetting($comment, $key) {
-        $list = $this->parseSettings($comment, $key);
+    public static function parseSetting($comment, $key) {
+        $list = self::parseSettings($comment, $key);
         if (empty($list)) {
             return null;
         } else {
             return $list[0];
         }
     }
-
 }

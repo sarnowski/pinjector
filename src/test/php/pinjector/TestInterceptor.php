@@ -14,15 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-require_once('pinjector/AbstractInterceptor.php');
+require_once('pinjector/DocParser.php');
+require_once('pinjector/Interceptor.php');
 require_once('Helper.php');
 
 /**
  *
  * @author Tobias Sarnowski
  */ 
-class TestInterceptor extends AbstractInterceptor {
+class TestInterceptor implements Interceptor {
 
     /**
      * @var Helper
@@ -41,15 +41,12 @@ class TestInterceptor extends AbstractInterceptor {
     /**
      * Throws an exception if a method is annotated with @break
      *
-     * @throws Exception
-     * @param ReflectionMethod $method
-     * @param  $params
      * @param InterceptionChain $chain
-     * @return
+     * @return void
      */
     public function intercept(InterceptionChain $chain) {
         // throws an exception if it finds @break
-        $value = $this->parseSetting($chain->getMethod()->getDocComment(), 'break');
+        $value = DocParser::parseSetting($chain->getMethod()->getDocComment(), 'break');
 
         if (!is_null($value)) {
             $message = $this->helper->generateHello("Interceptor");

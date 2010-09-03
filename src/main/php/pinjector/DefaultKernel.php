@@ -65,14 +65,16 @@ class DefaultKernel implements Kernel {
         return $this->binder;
     }
 
-    public function getInstance($className, $annotation = null) {
+    public function getInstance($className, $annotation = null, $allowNull = false) {
         $binding = $this->binder->getBinding($className, $annotation);
-        if (is_null($binding)) {
+        if (is_null($binding) && !$allowNull) {
             if ($annotation == null) {
-                throw new KernelException("class binding for $className not found");
+                throw new ConfigurationException("class binding for $className not found");
             } else {
-                throw new KernelException("class binding for $className [$annotation] not found");
+                throw new ConfigurationException("class binding for $className [$annotation] not found");
             }
+        } elseif (is_null($binding)) {
+            return null;
         }
 
         // initialize if nessecary
@@ -108,28 +110,7 @@ class DefaultKernel implements Kernel {
 
         // prepare constructor injection
         $constructor = $class->getConstructor();
-        $parameters = array();
-
-        if (!empty($constructor)) {
-            $injectionDefs = $this->getInjectionDefinitions($constructor, '@inject');
-
-            // resolve dependencies
-            foreach ($constructor->getParameters() as $parameter) {
-                $name = $parameter->getName();
-                $dependency = null;
-
-                foreach ($injectionDefs as $def) {
-                    if ($def['name'] == '$'.$name) {
-                        $dependency = $this->getInstance($def['class'], $def['annotation']);
-                    }
-                }
-
-                if ($dependency == null) {
-                    throw new KernelException("Parameter dependency '$name' not defined.");
-                }
-                $parameters[] = $dependency;
-            }
-        }
+        $parameters = $this->getDependencies($constructor);
 
         // instantiate!
         if (empty($parameters)) {
@@ -137,10 +118,54 @@ class DefaultKernel implements Kernel {
         } else {
             $instance = $class->newInstanceArgs($parameters);
         }
+
+        // do method injection
+        foreach ($class->getMethods() as $method) {
+            // does it have an @optional?
+            if (!is_null(DocParser::parseSetting($method->getDocComment(), 'optional'))) {
+                $parameters = $this->getDependencies($method, true);
+                $call = true;
+                foreach ($parameters as $parameter) {
+                    if ($parameter == null) {
+                        $call = false;
+                        break;
+                    }
+                }
+                if ($call) {
+                    $method->invokeArgs($instance, $parameters);
+                }
+            }
+        }
+
         return $instance;
     }
 
-    private function getInjectionDefinitions($method) {
+    private function getDependencies(&$method, $optionals = false) {
+        $parameters = array();
+        if (!empty($method)) {
+            $injectionDefs = $this->getInjectionDefinitions($method);
+
+            // resolve dependencies
+            foreach ($method->getParameters() as $parameter) {
+                $name = $parameter->getName();
+                $dependency = null;
+
+                foreach ($injectionDefs as $def) {
+                    if ($def['name'] == '$'.$name) {
+                        $dependency = $this->getInstance($def['class'], $def['annotation'], $optionals);
+                    }
+                }
+
+                if ($dependency == null && !$optionals) {
+                    throw new ConfigurationException("Parameter dependency '$name' not defined.");
+                }
+                $parameters[] = $dependency;
+            }
+        }
+        return $parameters;
+    }
+
+    private function getInjectionDefinitions(&$method) {
         $doc = $method->getDocComment();
         if (empty($doc)) {
             return array();
@@ -168,7 +193,7 @@ class DefaultKernel implements Kernel {
                     }
                     $defs[] = $def;
                 } else {
-                    throw new KernelException("unknown @inject parameters");
+                    throw new ConfigurationException("too few arguments on @param definition");
                 }
             }
         }

@@ -36,6 +36,23 @@ class TestApplication implements Application {
         $this->helper = $helper;
     }
 
+    /**
+     * @optional
+     * @param  Helper $helper
+     * @return void
+     */
+    public function setNormalHelper($helper) {
+        // will be called if a Helper was bound
+    }
+
+    /**
+     * @optional
+     * @param  Helper $helper !unknown
+     * @return void
+     */
+    public function setUnknownHelper($helper) {
+        // will be called if a Helper !unknown was bound
+    }
 
     public function getWelcomeMessage() {
         return $this->helper->generateHello("World");
