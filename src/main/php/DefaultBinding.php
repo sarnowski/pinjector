@@ -24,7 +24,7 @@ class DefaultBinding implements Binding {
     private $sourceInstance;
 
 
-    public function __construct(string $className) {
+    function __construct(string $className) {
         $this->sourceClassName = null;
         $this->sourceInstance = null;
 

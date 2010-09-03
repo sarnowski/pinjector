@@ -1,0 +1,110 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>org.onsteroids.php</groupId>
+    <artifactId>kernel</artifactId>
+    <version>0.1-SNAPSHOT</version>
+
+    <packaging>php</packaging>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.phpmaven</groupId>
+                <artifactId>maven-php-plugin</artifactId>
+                <version>1.1-SNAPSHOT</version>
+                <extensions>true</extensions>
+            </plugin>
+        </plugins>
+    </build>
+
+
+    <dependencies>
+        <!--  phpUnit for PHP 5 -->
+        <dependency>
+            <groupId>org.phpunit</groupId>
+            <artifactId>phpunit5</artifactId>
+            <version>3.3.9</version>
+        </dependency>
+    </dependencies>
+
+
+    <reporting>
+        <plugins>
+            <plugin>
+                <groupId>org.phpmaven</groupId>
+                <artifactId>maven-php-plugin</artifactId>
+                <version>1.0</version>
+                <reportSets>
+                    <reportSet>
+                        <reports>
+                            <report>doxygen</report>
+                            <report>phpdocumentor</report>
+                        </reports>
+                    </reportSet>
+                </reportSets>
+            </plugin>
+            <!--
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-report-plugin</artifactId>
+                <version>2.4</version>
+                <reportSets>
+                    <reportSet>
+                        <reports>
+                            <report>report-only</report>
+                        </reports>
+                    </reportSet>
+                </reportSets>
+            </plugin>
+            -->
+        </plugins>
+    </reporting>
+
+
+
+    <repositories>
+        <repository>
+            <id>release-repo1.php-maven.org</id>
+            <name>PHP-Maven 2 Release Repository</name>
+            <url>http://repo1.php-maven.org/release</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+        </repository>
+        <repository>
+            <id>snapshot-repo1.php-maven.org</id>
+            <name>PHP-Maven 2 Snapshot Repository</name>
+            <url>http://repo1.php-maven.org/snapshot</url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+
+    <pluginRepositories>
+        <pluginRepository>
+            <id>release-repo1.php-maven.org</id>
+            <name>PHP-Maven 2 Release Repository</name>
+            <url>http://repo1.php-maven.org/release</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+        </pluginRepository>
+        <pluginRepository>
+            <id>snapshot-repo1.php-maven.org</id>
+            <name>PHP-Maven 2 Snapshot Repository</name>
+            <url>http://repo1.php-maven.org/snapshot</url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </pluginRepository>
+    </pluginRepositories>
+
+</project>

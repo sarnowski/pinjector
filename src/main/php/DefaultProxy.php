@@ -20,7 +20,7 @@ class DefaultProxy {
      */
     private $kernel;
 
-    public function __construct($delegate, DefaultKernel $kernel) {
+    function __construct($delegate, DefaultKernel $kernel) {
         $this->delegate = $delegate;
         $this->kernel = $kernel;
 

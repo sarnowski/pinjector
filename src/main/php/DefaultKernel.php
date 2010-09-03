@@ -34,7 +34,10 @@ class DefaultKernel implements Kernel {
      */
     private $binder;
 
-    private function __construct() {
+    /**
+     * @private
+     */
+    function __construct() {
         $this->binder = new DefaultBinder();
     }
 
