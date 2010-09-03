@@ -7,8 +7,21 @@ require_once('Application.php');
  */
 class DefaultApplication implements Application {
 
+    /**
+     * @var Helper
+     */
+    private $helper;
+
+    /**
+     * @param Helper $helper
+     * @return void
+     */
+    function __construct(Helper $helper) {
+        $this->helper = $helper;
+    }
+
     public function getWelcomeMessage() {
-        return "Hello World";
+        return $this->helper->generateHello("World");
     }
 
 }

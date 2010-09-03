@@ -11,6 +11,7 @@ require_once('DefaultApplication.php');
 class ApplicationModule implements Module {
 
     public function configure(Binder $binder) {
+        $binder->bind('Helper')->to('DefaultHelper');
         $binder->bind('Application')->to('DefaultApplication');
     }
 }
