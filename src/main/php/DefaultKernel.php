@@ -74,7 +74,7 @@ class DefaultKernel implements Kernel {
 
 
         // instantiate!
-        $instance = $class->newInstance(array());
+        $instance = $class->newInstanceArgs();
 
         // wrap with a proxy
         return new DefaultProxy($instance, $this);

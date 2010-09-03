@@ -10,7 +10,7 @@ interface Binding {
      * @param string $className
      * @return Binding
      */
-    public function to(string $className);
+    public function to($className);
 
     /**
      * @abstract

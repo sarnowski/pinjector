@@ -25,6 +25,6 @@ interface Binder {
      * @param  string $className
      * @return Binding
      */
-    public function bind(string $className);
+    public function bind($className);
 
 }

@@ -23,7 +23,7 @@ class DefaultBinder implements Binder {
      * @param  $className
      * @return DefaultBinding
      */
-    public function getBinding(string $className) {
+    public function getBinding($className) {
         return $this->bindings[$className];
     }
 
@@ -31,7 +31,7 @@ class DefaultBinder implements Binder {
         $module->configure($this);
     }
 
-    public function bind(string $className) {
+    public function bind($className) {
         if (isset($this->bindings[$className])) {
             throw new Exception("target $className already bound");
         }

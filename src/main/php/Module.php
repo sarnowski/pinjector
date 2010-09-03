@@ -10,9 +10,9 @@ interface Module {
      * Will be called to configure a module.
      *
      * @abstract
-     * @param  $binder Binder the binder to use
+     * @param  Binder $binder the binder to use
      * @return void
      */
-    function configure($binder);
+    public function configure(Binder $binder);
 
 }

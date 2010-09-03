@@ -24,7 +24,7 @@ class DefaultBinding implements Binding {
     private $sourceInstance;
 
 
-    function __construct(string $className) {
+    function __construct($className) {
         $this->sourceClassName = null;
         $this->sourceInstance = null;
 
@@ -37,7 +37,7 @@ class DefaultBinding implements Binding {
         }
     }
 
-    public function to(string $className) {
+    public function to($className) {
         $this->checkAlreadySet();
         $this->sourceClassName = $className;
         return $this;
