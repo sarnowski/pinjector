@@ -1,6 +1,6 @@
 <?php
 require_once('PHPUnit/Framework.php');
-require_once('DefaultKernel.php');
+require_once('pinjector/DefaultKernel.php');
 require_once('ApplicationModule.php');
 
 /**
@@ -16,7 +16,7 @@ class ApplicationTest extends PHPUnit_Framework_TestCase {
         $application = $kernel->getInstance('Application');
         $this->assertNotNull($application, 'Proxy is null');
         $this->assertNotNull($application->getProxiedInstance(), 'Proxy\'s delegate is null');
-        $this->assertEquals('DefaultApplication', get_class($application->getProxiedInstance()));
+        $this->assertEquals('TestApplication', get_class($application->getProxiedInstance()));
         $this->assertEquals('Hi World', $application->getWelcomeMessage());
 
         $helper = $kernel->getInstance('Helper');

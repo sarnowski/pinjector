@@ -5,7 +5,7 @@ require_once('Helper.php');
  *
  * @author Tobias Sarnowski
  */ 
-class DefaultHelper implements Helper {
+class TestHelper implements Helper {
 
     private $prefix = 'Hello ';
 
@@ -15,5 +15,9 @@ class DefaultHelper implements Helper {
 
     public function generateHello($name) {
         return $this->prefix.$name;
+    }
+
+    public function __toString() {
+        return '{TestHelper}';
     }
 }

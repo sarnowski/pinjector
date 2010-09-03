@@ -12,11 +12,14 @@ class DefaultBinder implements Binder {
 
     private $bindings;
 
+    private $interceptors;
+
     /**
      * @private
      */
     function __construct() {
         $this->bindings = array();
+        $this->interceptors = array();
     }
 
     /**
@@ -46,6 +49,18 @@ class DefaultBinder implements Binder {
         }
         $this->bindings[$binding->getTargetClassName()][] = $binding;
         return $binding;
+    }
+
+    public function interceptWith($className, $annotation = null) {
+        $this->interceptors[] = array('class' => $className, 'annotation' => $annotation);
+    }
+
+    public function interceptWithInstance($instance) {
+        $this->interceptors[] = array('instance' => $instance);
+    }
+
+    public function getInterceptors() {
+        return $this->interceptors;
     }
 
     public function __toString() {

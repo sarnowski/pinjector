@@ -43,16 +43,20 @@ class DefaultKernel implements Kernel {
     }
 
     /**
-     * @return Binder the used binder
+     * @return DefaultBinder the used binder
      */
-    private function getBinder() {
+    public function getBinder() {
         return $this->binder;
     }
 
     public function getInstance($className, $annotation = null) {
         $binding = $this->binder->getBinding($className, $annotation);
         if (is_null($binding)) {
-            throw new KernelException("class binding not found");
+            if ($annotation == null) {
+                throw new KernelException("class binding for $className not found");
+            } else {
+                throw new KernelException("class binding for $className [$annotation] not found");
+            }
         }
 
         // initialize if nessecary

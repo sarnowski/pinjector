@@ -27,4 +27,24 @@ interface Binder {
      */
     public function bind($className);
 
+
+    /**
+     * Register an interception handler.
+     *
+     * @abstract
+     * @param  string $className
+     * @param  string $annotation
+     * @return void
+     */
+    public function interceptWith($className, $annotation = null);
+
+    /**
+     * Register an interception handler.
+     *
+     * @abstract
+     * @param  mixed $instance
+     * @return void
+     */
+    public function interceptWithInstance($instance);
+
 }

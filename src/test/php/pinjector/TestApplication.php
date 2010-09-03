@@ -5,7 +5,7 @@ require_once('Application.php');
  *
  * @author Tobias Sarnowski
  */
-class DefaultApplication implements Application {
+class TestApplication implements Application {
 
     /**
      * @var Helper
@@ -20,8 +20,12 @@ class DefaultApplication implements Application {
         $this->helper = $helper;
     }
 
+
     public function getWelcomeMessage() {
         return $this->helper->generateHello("World");
     }
 
+    public function __toString() {
+        return '{TestApplication}';
+    }
 }
