@@ -31,9 +31,9 @@ class TestInterceptor extends AbstractInterceptor {
      * @param InterceptionChain $chain
      * @return
      */
-    public function intercept(ReflectionMethod &$method, $params, InterceptionChain $chain) {
+    public function intercept(InterceptionChain $chain) {
         // throws an exception if it finds @break
-        $value = $this->parseSetting($method->getDocComment(), 'break');
+        $value = $this->parseSetting($chain->getMethod()->getDocComment(), 'break');
 
         if (!is_null($value)) {
             $message = $this->helper->generateHello("Interceptor");

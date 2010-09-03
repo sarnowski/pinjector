@@ -44,10 +44,30 @@ class DefaultInterceptionChain implements InterceptionChain {
         $interceptor = $this->interceptors[$this->index];
         $this->index++;
         if ($this->index <= count($interceptor)) {
-            return $interceptor->getProxiedInstance()->intercept($this->method, $this->params, $this);
+            return $interceptor->getProxiedInstance()->intercept($this);
         } else {
             // it's finished
             return $this->method->invokeArgs($this->delegate, $this->params);
         }
+    }
+
+    public function getDelegate() {
+        return $this->delegate;
+    }
+
+    public function getMethod() {
+        return $this->method;
+    }
+
+    public function getParameters() {
+        return $this->params;
+    }
+
+    public function setMethod(&$method) {
+        $this->method = $method;
+    }
+
+    public function setParameters(&$parameters) {
+        $this->params = $parameters;
     }
 }
