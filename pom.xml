@@ -1,12 +1,12 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>org.onsteroids.php</groupId>
-        <artifactId>parent</artifactId>
-        <version>0.1-SNAPSHOT</version>
+        <groupId>com.github.sarnowski</groupId>
+        <artifactId>php-parent</artifactId>
+        <version>0.1.1</version>
     </parent>
 
-    <groupId>org.onsteroids.php</groupId>
+    <groupId>com.github.sarnowski</groupId>
     <artifactId>pinjector</artifactId>
     <version>0.1-SNAPSHOT</version>
 
@@ -23,44 +23,15 @@
     </developers>
 
     <scm>
-        <connection>scm:git:git://github.com/sarnowski/pinjector.git</connection>
-        <developerConnection>scm:git:ssh://git@github.com/sarnowski/pinjector.git</developerConnection>
+        <connection>scm:git:git://github.com/sarnowski/${project.artifactId}.git</connection>
+        <developerConnection>scm:git:git@github.com:sarnowski/${project.artifactId}.git</developerConnection>
     </scm>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.phpmaven</groupId>
-                <artifactId>maven-php-plugin</artifactId>
-                <version>2.0-SNAPSHOT</version>
-                <extensions>true</extensions>
-                <configuration>
-                    <logPhpOutput>true</logPhpOutput>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
-
-    <distributionManagement>
-        <site>
-            <id>github</id>
-            <name>github.com webspace</name>
-            <url>file://${user.home}/github/pinjector/</url>
-        </site>
-    </distributionManagement>
 
     <repositories>
         <repository>
-            <id>sarnowski-github</id>
-            <name>sarnowski.github.com</name>
-            <url>http://sarnowski.github.com/maven2</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
+            <id>sarnowski.github.com</id>
+            <name>Tobias Sarnowski's Maven Repository</name>
+            <url>http://sarnowski.github.com/repository</url>
         </repository>
     </repositories>
-
 </project>
