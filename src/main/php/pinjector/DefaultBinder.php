@@ -18,6 +18,7 @@
 require_once('Binder.php');
 require_once('Binding.php');
 require_once('DefaultBinding.php');
+require_once('DefaultInterception.php');
 require_once('Module.php');
 
 /**
@@ -28,14 +29,14 @@ class DefaultBinder implements Binder {
 
     private $bindings;
 
-    private $interceptors;
+    private $interceptions;
 
     /**
      * @private
      */
     function __construct() {
         $this->bindings = array();
-        $this->interceptors = array();
+        $this->interceptions = array();
     }
 
     /**
@@ -71,18 +72,16 @@ class DefaultBinder implements Binder {
     }
 
     public function interceptWith($className, $annotation = null) {
-        $this->interceptors[] = array('class' => $className, 'annotation' => $annotation);
+        $interception = new DefaultInterception($className, $annotation);
+        $this->interceptions[] = $interception;
+        return $interception;
     }
 
-    public function interceptWithInstance($instance) {
-        $this->interceptors[] = array('instance' => $instance);
-    }
-
-    public function getInterceptors() {
-        return $this->interceptors;
+    public function getInterceptions() {
+        return $this->interceptions;
     }
 
     public function __toString() {
-        return '{DefaultBinder binding: '.$this->bindings.'}';
+        return '{DefaultBinder bindings: '.$this->bindings.'  interceptions: '.$this->interceptions.'}';
     }
 }

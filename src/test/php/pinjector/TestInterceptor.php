@@ -17,6 +17,7 @@
 require_once('pinjector/DocParser.php');
 require_once('pinjector/Interceptor.php');
 require_once('Helper.php');
+require_once('TestException.php');
 
 /**
  *
@@ -37,7 +38,6 @@ class TestInterceptor implements Interceptor {
         $this->helper = $helper;
     }
 
-
     /**
      * Throws an exception if a method is annotated with @break
      *
@@ -45,16 +45,7 @@ class TestInterceptor implements Interceptor {
      * @return void
      */
     public function intercept(InterceptionChain $chain) {
-        // throws an exception if it finds @break
-        $value = DocParser::parseSetting($chain->getMethod()->getDocComment(), 'break');
-
-        if (!is_null($value)) {
-            $message = $this->helper->generateHello("Interceptor");
-            throw new Exception("Comment triggered exception: ".$message);
-
-        } else {
-            return $chain->proceed();
-        }
+        throw new TestException("@break found");
     }
 
     public function __toString() {

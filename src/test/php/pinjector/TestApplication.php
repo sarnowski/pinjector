@@ -58,7 +58,23 @@ class TestApplication implements Application {
         return $this->helper->generateHello("World");
     }
 
+    public function breakUs() {
+        $this->breakMe();
+    }
+
+    /**
+     * @return void
+     * @break
+     */
+    function breakMe() {
+        // should never be called
+    }
+
     public function __toString() {
         return '{TestApplication}';
+    }
+
+    public function getHelper() {
+        return $this->helper;
     }
 }

@@ -19,7 +19,7 @@ require_once('Binder.php');
 require_once('Binding.php');
 require_once('DefaultBinder.php');
 require_once('DefaultBinding.php');
-require_once('DefaultProxy.php');
+require_once('DefaultWeaver.php');
 require_once('DocParser.php');
 require_once('Kernel.php');
 require_once('KernelException.php');
@@ -53,10 +53,16 @@ class DefaultKernel implements Kernel {
     private $binder;
 
     /**
+     * @var DefaultWeaver
+     */
+    private $weaver;
+
+    /**
      * @private
      */
     function __construct() {
         $this->binder = new DefaultBinder();
+        $this->weaver = new DefaultWeaver($this->binder);
     }
 
     /**
@@ -92,7 +98,7 @@ class DefaultKernel implements Kernel {
         }
 
         // return the proxied instance
-        return new DefaultProxy($instance, $this);
+        return $instance;
     }
 
     private function newInstance(DefaultBinding $binding) {
@@ -103,22 +109,23 @@ class DefaultKernel implements Kernel {
         // ok, let's do our magic
         $sourceClass = $binding->getSourceClassName();
         if (is_null($sourceClass)) {
+            // TODO targetClass itself already bound
             $sourceClass = $binding->getTargetClassName();
         }
 
+        // get weaved class definition
+        $weavedClassName = $this->weaver->weave($sourceClass);
+        $weavedClass = new ReflectionClass($weavedClassName);
+
         // do the injection magic
-        $class = new ReflectionClass($sourceClass);
+        $class = $weavedClassName::superClass();
 
         // prepare constructor injection
         $constructor = $class->getConstructor();
         $parameters = $this->getDependencies($constructor);
 
         // instantiate!
-        if (empty($parameters)) {
-            $instance = $class->newInstanceArgs();
-        } else {
-            $instance = $class->newInstanceArgs($parameters);
-        }
+        $instance = $weavedClass->newInstanceArgs(array($this, $parameters));
 
         // do method injection
         foreach ($class->getMethods() as $method) {

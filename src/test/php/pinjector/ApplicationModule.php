@@ -18,10 +18,11 @@
 require_once('pinjector/Binder.php');
 require_once('pinjector/Module.php');
 require_once('Application.php');
+require_once('Helper.php');
 require_once('TestApplication.php');
 require_once('TestHelper.php');
 require_once('TestInterceptor.php');
-require_once('Helper.php');
+require_once('TestPointcut.php');
 
 /**
  *
@@ -39,6 +40,6 @@ class ApplicationModule implements Module {
         $binder->bind('Application')->to('TestApplication')->inRequestScope();
 
         $binder->bind('TestInterceptor')->inRequestScope();
-        $binder->interceptWith('TestInterceptor');
+        $binder->interceptWith('TestInterceptor')->on(new TestPointcut());
     }
 }

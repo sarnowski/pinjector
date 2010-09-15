@@ -14,45 +14,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-require_once('Binding.php');
-require_once('Interception.php');
-require_once('Module.php');
+
 
 
 /**
- * Utility to define bindings.
+ * Defines the matching logic of a pointcut.
  *
  * @author Tobias Sarnowski
  */
-interface Binder {
+interface Pointcut {
 
     /**
-     * Installs a module.
+     * Tests a given method if this pointcut matches it.
      *
      * @abstract
-     * @param Module $module
-     * @return void
+     * @param  ReflectionMethod $method the method to test against
+     * @return boolean
      */
-    public function install(Module $module);
-
-    /**
-     * Creates a new binding.
-     *
-     * @abstract
-     * @param  string $className
-     * @return Binding
-     */
-    public function bind($className);
-
-
-    /**
-     * Register an interception handler.
-     *
-     * @abstract
-     * @param  string $className
-     * @param  string $annotation
-     * @return Interception
-     */
-    public function interceptWith($className, $annotation = null);
+    public function matchesMethod(ReflectionMethod &$method);
 
 }

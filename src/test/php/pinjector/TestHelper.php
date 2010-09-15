@@ -29,6 +29,11 @@ class TestHelper implements Helper {
         $this->prefix = $prefix;
     }
 
+    /**
+     * @param  $name
+     * @return string
+     * @break
+     */
     public function generateHello($name) {
         return $this->prefix.$name;
     }

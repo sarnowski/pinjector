@@ -15,32 +15,12 @@
  * limitations under the License.
  */
 
+require_once('KernelException.php');
+
 /**
  *
  * @author Tobias Sarnowski
- */
-
-interface Application {
-
-    /**
-     * @abstract
-     * @return string
-     */
-    public function getWelcomeMessage();
-
-    /**
-     * @abstract
-     * @return Helper
-     */
-    public function getHelper();
-
-
-    /**
-     * test for $this method inception..
-     *
-     * @abstract
-     * @return void
-     */
-    public function breakUs();
+ */ 
+class WeavingException extends KernelException {
 
 }

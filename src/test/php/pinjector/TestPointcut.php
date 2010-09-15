@@ -15,32 +15,19 @@
  * limitations under the License.
  */
 
+require_once('pinjector/Pointcut.php');
+
+
 /**
  *
  * @author Tobias Sarnowski
- */
+ */ 
+class TestPointcut implements Pointcut {
 
-interface Application {
-
-    /**
-     * @abstract
-     * @return string
-     */
-    public function getWelcomeMessage();
-
-    /**
-     * @abstract
-     * @return Helper
-     */
-    public function getHelper();
-
-
-    /**
-     * test for $this method inception..
-     *
-     * @abstract
-     * @return void
-     */
-    public function breakUs();
+    public function matchesMethod(ReflectionMethod &$method) {
+        // hooks if it finds @break
+        $value = DocParser::parseSetting($method->getDocComment(), 'break');
+        return !is_null($value);
+    }
 
 }

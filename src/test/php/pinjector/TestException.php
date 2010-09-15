@@ -15,32 +15,12 @@
  * limitations under the License.
  */
 
+
+
 /**
  *
  * @author Tobias Sarnowski
- */
-
-interface Application {
-
-    /**
-     * @abstract
-     * @return string
-     */
-    public function getWelcomeMessage();
-
-    /**
-     * @abstract
-     * @return Helper
-     */
-    public function getHelper();
-
-
-    /**
-     * test for $this method inception..
-     *
-     * @abstract
-     * @return void
-     */
-    public function breakUs();
+ */ 
+class TestException extends Exception {
 
 }
