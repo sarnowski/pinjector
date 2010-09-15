@@ -3,7 +3,7 @@
     <parent>
         <groupId>com.github.sarnowski</groupId>
         <artifactId>php-parent</artifactId>
-        <version>0.1.1</version>
+        <version>0.2.1</version>
     </parent>
 
     <groupId>com.github.sarnowski</groupId>
@@ -12,7 +12,7 @@
 
     <name>pinjector</name>
 
-    <packaging>php</packaging>
+    <packaging>jar</packaging>
 
     <developers>
         <developer>
