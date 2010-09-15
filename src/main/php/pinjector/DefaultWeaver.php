@@ -86,11 +86,30 @@ class DefaultWeaver {
         // this will be the name for the weaved class
         $weavedClassName = 'Weaved__'.$className;
 
-        // TODO check for loaded weaved definition
-        // TODO check for generated weaved class file
+        // already loaded? exit here
+        if (class_exists($weavedClassName)) {
+            return $weavedClassName;
+        }
 
         // the definition to use
         $super = new ReflectionClass($className);
+
+        // TODO check for generated weaved class file
+        if (self::$weavedPath != null) {
+            $originalClassFile = $super->getFileName();
+
+            $hash = md5($originalClassFile.$className);
+            $weavedClassFile = self::$weavedPath.'/'.$hash.'.php';
+
+            if (file_exists($weavedClassFile)) {
+                // do not check for modification time as we cannot be sure
+                // that the inheritance path of the class is the same as before
+                include($weavedClassFile);
+                return $weavedClassName;
+            }
+        } else {
+            $weavedClassFile = false;
+        }
 
         if (!$super) {
             throw new WeavingException("$className definition not found");
@@ -266,7 +285,16 @@ class DefaultWeaver {
             throw new WeavingException("Generated weaved class is incorrect; internal problem!");
         }
 
-        // TODO store class definition to file
+        // store class definition to file
+        if ($weavedClassFile) {
+            if (is_writable(self::$weavedPath)) {
+                if (file_put_contents($weavedClassFile, "<?php\n".$class) === FALSE) {
+                    throw new WeavingException("Cannot write to file ".$weavedClassFile);
+                }
+            } else {
+                throw new WeavingException("Cannot write to directory ".self::$weavedPath);
+            }
+        }
 
         // we're done
         return $weavedClassName;
