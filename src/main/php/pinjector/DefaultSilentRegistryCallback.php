@@ -15,21 +15,29 @@
  * limitations under the License.
  */
 
+require_once('RegistryCallback.php');
 
 
 /**
  *
  * @author Tobias Sarnowski
- */
-interface RegistryCallback {
+ */ 
+class DefaultSilentRegistryCallback implements RegistryCallback {
 
     /**
-     * Will be called for each entry of the key in the registry.
-     *
-     * @abstract
-     * @param  mixed $object
-     * @return boolean if the loop has to go on
+     * @var RegistryCallback
      */
-    public function process($object);
+    private $callback;
 
+    function __construct(RegistryCallback $callback) {
+        $this->callback = $callback;
+    }
+
+    public function process($object) {
+        try {
+            return $this->callback->process($object);
+        } catch (Exception $e) {
+            // ignore
+        }
+    }
 }

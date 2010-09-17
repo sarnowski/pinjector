@@ -17,6 +17,7 @@
 
 require_once('Kernel.php');
 require_once('Registry.php');
+require_once('DefaultSilentRegistryCallback.php');
 
 
 /**
@@ -45,21 +46,25 @@ class DefaultRegistry implements Registry {
     }
 
     public function call($key, RegistryCallback $callback) {
-        $objects = $this->get($key);
-        foreach ($objects as $object) {
-            $callback->process($object);
+        if (isset($this->objects[$key])) {
+            foreach ($this->objects[$key] as $object) {
+                if ($callback->process($object) === false) {
+                    return;
+                }
+            }
+        }
+        if (isset($this->bindings[$key])) {
+            foreach ($this->bindings[$key] as $binding) {
+                $object = $this->kernel->getInstance($binding['className'], $binding['annotation']);
+                if ($callback->process($object) === false) {
+                    return;
+                }
+            }
         }
     }
 
     public function callSilent($key, RegistryCallback $callback) {
-        $objects = $this->get($key);
-        foreach ($objects as $object) {
-            try {
-                $callback->process($object);
-            } catch (Exception $e) {
-                // ignore
-            }
-        }
+        $this->call($key, new DefaultSilentRegistryCallback($callback));
     }
 
     public function get($key) {
