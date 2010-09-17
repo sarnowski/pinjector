@@ -49,7 +49,7 @@ class DefaultRegistry implements Registry {
         if (isset($this->objects[$key])) {
             foreach ($this->objects[$key] as $object) {
                 if ($callback->process($object) === false) {
-                    return;
+                    return false;
                 }
             }
         }
@@ -57,14 +57,15 @@ class DefaultRegistry implements Registry {
             foreach ($this->bindings[$key] as $binding) {
                 $object = $this->kernel->getInstance($binding['className'], $binding['annotation']);
                 if ($callback->process($object) === false) {
-                    return;
+                    return false;
                 }
             }
         }
+        return true;
     }
 
     public function callSilent($key, RegistryCallback $callback) {
-        $this->call($key, new DefaultSilentRegistryCallback($callback));
+        return $this->call($key, new DefaultSilentRegistryCallback($callback));
     }
 
     public function get($key) {

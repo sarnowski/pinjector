@@ -81,7 +81,7 @@ interface Registry {
      * @abstract
      * @param  mixed $key
      * @param  RegistryCallback $callback
-     * @return void
+     * @return boolean if no module stopped the loop
      */
     public function call($key, RegistryCallback $callback);
 
@@ -92,7 +92,7 @@ interface Registry {
      * @abstract
      * @param  mixed $key
      * @param  RegistryCallback $callback
-     * @return void
+     * @return boolean if no module stopped the loop
      */
     public function callSilent($key, RegistryCallback $callback);
 
