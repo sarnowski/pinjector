@@ -14,55 +14,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-require_once('Binding.php');
-require_once('Interception.php');
-require_once('Module.php');
-require_once('Registration.php');
+
 
 
 /**
- * Utility to define bindings.
  *
  * @author Tobias Sarnowski
  */
-interface Binder {
+interface Registration {
 
     /**
-     * Installs a module.
-     *
-     * @abstract
-     * @param Module $module
-     * @return void
-     */
-    public function install(Module $module);
-
-    /**
-     * Creates a new binding.
-     *
-     * @abstract
-     * @param  string $className
-     * @return Binding
-     */
-    public function bind($className);
-
-
-    /**
-     * Register an interception handler.
+     * Connects the registration with a binding.
      *
      * @abstract
      * @param  string $className
      * @param  string $annotation
-     * @return Interception
+     * @return void
      */
-    public function interceptWith($className, $annotation = null);
+    public function to($className, $annotation = null);
 
     /**
-     * Creates a registration for the given key.
+     * Connects the registration with an instanced object.
      *
      * @abstract
-     * @param  string $registryKey
-     * @return Registration
+     * @param  mixed $instance
+     * @return void
      */
-    public function register($registryKey);
+    public function toInstance($instance);
 
 }

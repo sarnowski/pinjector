@@ -19,6 +19,7 @@ require_once('Binder.php');
 require_once('Binding.php');
 require_once('DefaultBinder.php');
 require_once('DefaultBinding.php');
+require_once('DefaultRegistry.php');
 require_once('DefaultWeaver.php');
 require_once('DocParser.php');
 require_once('Kernel.php');
@@ -58,11 +59,20 @@ class DefaultKernel implements Kernel {
     private $weaver;
 
     /**
+     * @var DefaultRegistry
+     */
+    private $registry;
+
+    /**
      * @private
      */
     function __construct() {
-        $this->binder = new DefaultBinder();
+        $this->registry = new DefaultRegistry($this);
+        $this->binder = new DefaultBinder($this->registry);
         $this->weaver = new DefaultWeaver($this->binder);
+
+        $this->binder->bind('Registry')->toInstance($this->registry);
+        $this->binder->bind('Weaver')->toInstance($this->weaver);
     }
 
     /**

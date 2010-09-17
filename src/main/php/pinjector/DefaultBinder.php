@@ -19,7 +19,9 @@ require_once('Binder.php');
 require_once('Binding.php');
 require_once('DefaultBinding.php');
 require_once('DefaultInterception.php');
+require_once('DefaultRegistration.php');
 require_once('Module.php');
+require_once('Registry.php');
 
 /**
  *
@@ -27,16 +29,35 @@ require_once('Module.php');
  */
 class DefaultBinder implements Binder {
 
+    /**
+     * @var array
+     */
+    private $registrations;
+
+    /**
+     * @var Registry
+     */
+    private $registry;
+
+    /**
+     * @var array
+     */
     private $bindings;
 
+    /**
+     * @var array
+     */
     private $interceptions;
 
     /**
      * @private
+     * @param Registry $registry
      */
-    function __construct() {
+    function __construct(Registry $registry) {
         $this->bindings = array();
         $this->interceptions = array();
+        $this->registrations = array();
+        $this->registry = $registry;
     }
 
     /**
@@ -60,6 +81,22 @@ class DefaultBinder implements Binder {
             throw new ConfigurationException("module is null");
         }
         $module->configure($this);
+
+        foreach ($this->registrations as $registration) {
+            if ($registration->getInstance() == null) {
+                $this->registry->registerBinding(
+                    $registration->getKey(),
+                    $registration->getClassName(),
+                    $registration->getAnnotation()
+                );
+            } else {
+                $this->registry->register(
+                    $registration->getKey(),
+                    $registration->getInstance()
+                );
+            }
+        }
+        $this->registrations = array();
     }
 
     public function bind($className) {
@@ -77,6 +114,15 @@ class DefaultBinder implements Binder {
         return $interception;
     }
 
+    public function register($registryKey) {
+        $registration = new DefaultRegistration($registryKey);
+        $this->registrations[] = $registration;
+        return $registration;
+    }
+
+    /**
+     * @return array
+     */
     public function getInterceptions() {
         return $this->interceptions;
     }

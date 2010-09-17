@@ -18,13 +18,14 @@
 require_once('DefaultInterceptionChain.php');
 require_once('Interceptor.php');
 require_once('Pointcut.php');
+require_once('Weaver.php');
 require_once('WeavingException.php');
 
 /**
  *
  * @author Tobias Sarnowski
  */ 
-class DefaultWeaver {
+class DefaultWeaver implements Weaver {
 
     /**
      * Path to store weaved code.
