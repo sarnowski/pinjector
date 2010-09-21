@@ -128,7 +128,9 @@ class DefaultKernel implements Kernel {
         $weavedClass = new ReflectionClass($weavedClassName);
 
         // do the injection magic
-        $class = $weavedClassName::superClass();
+        // is only php 5.3+ compatible: $class = $weavedClassName::superClass();
+        // better:
+        $class = $weavedClass->getMethod("superClass")->invoke(null);
 
         // prepare constructor injection
         $constructor = $class->getConstructor();
