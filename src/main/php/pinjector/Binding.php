@@ -22,13 +22,14 @@
 interface Binding {
 
     /**
-     * Defines the implementation class.
+     * Defines the implementation class or another binding.
      *
      * @abstract
      * @param string $className
+     * @param string $annotation
      * @return Binding
      */
-    public function to($className);
+    public function to($className, $annotation = null);
 
     /**
      * Gives an already instantiated implementation.

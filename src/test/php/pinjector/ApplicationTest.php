@@ -41,6 +41,9 @@ class ApplicationTest extends PHPUnit_Framework_TestCase {
         $this->assertNotNull($helper, 'helper is null');
         $this->assertFalse($application->getHelper() == $helper, "helper is the same reference as in application");
 
+        $helper2 = $kernel->getInstance('Helper', 'alternative2');
+        $this->assertNotNull($helper2, 'helper2 is null');
+
         try {
             $this->assertEquals('Hello World', $helper->generateHello('World'), "wrong message");
             $this->assertTrue(false, "previous method call should throw an exception");

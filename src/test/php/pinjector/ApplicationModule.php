@@ -36,6 +36,7 @@ class ApplicationModule implements Module {
         $helper = new TestHelper();
         $helper->setPrefix('Hi ');
         $binder->bind('Helper')->annotatedWith('alternative')->toInstance($helper);
+        $binder->bind('Helper')->annotatedWith('alternative2')->to('Helper', 'alternative');
 
         $binder->bind('Application')->to('TestApplication')->inRequestScope();
 

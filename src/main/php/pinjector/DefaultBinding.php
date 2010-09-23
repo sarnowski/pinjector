@@ -50,6 +50,11 @@ class DefaultBinding implements Binding {
     private $sourceClassName;
 
     /**
+     * @var string
+     */
+    private $sourceAnnotation;
+
+    /**
      * @var mixed
      */
     private $sourceInstance;
@@ -63,6 +68,7 @@ class DefaultBinding implements Binding {
     function __construct($className) {
         $this->targetAnnotation = null;
         $this->sourceClassName = null;
+        $this->sourceAnnotation = null;
         $this->sourceInstance = null;
         $this->scope = null;
 
@@ -75,9 +81,10 @@ class DefaultBinding implements Binding {
         }
     }
 
-    public function to($className) {
+    public function to($className, $annotation = null) {
         $this->checkAlreadySet();
         $this->sourceClassName = $className;
+        $this->sourceAnnotation = $annotation;
         return $this;
     }
 
@@ -91,6 +98,13 @@ class DefaultBinding implements Binding {
      */
     public function getSourceClassName() {
         return $this->sourceClassName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSourceAnnotation() {
+        return $this->sourceAnnotation;
     }
 
     /**

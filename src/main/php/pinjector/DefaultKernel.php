@@ -116,13 +116,28 @@ class DefaultKernel implements Kernel {
             return $binding->getSourceInstance();
         }
 
-        // ok, let's do our magic
+        // which is the real implementation now?
         $sourceClass = $binding->getSourceClassName();
+        $sourceAnnotation = $binding->getSourceAnnotation();
+
         if (is_null($sourceClass)) {
-            // TODO targetClass itself already bound
+            // implementation directly bound
             $sourceClass = $binding->getTargetClassName();
+
+        } else {
+            // source is a binding itself?
+            $sourceBinding = $this->binder->getBinding($sourceClass, $sourceAnnotation);
+            if ($sourceBinding != null) {
+                return $this->newInstance($sourceBinding);
+            }
+
+            // annotation given?
+            if ($sourceAnnotation != null) {
+                throw new ConfigurationException("Source annotation given but no appropriate binding found");
+            }
         }
 
+        // now we have the implementation, load it
         return $this->instantiate($sourceClass);
     }
 
