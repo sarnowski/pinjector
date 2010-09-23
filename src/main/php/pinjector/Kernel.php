@@ -40,4 +40,14 @@ interface Kernel {
      */
     public function install(Module $module);
 
+    /**
+     * Instantiates an object of the given classname with the given arguments.
+     *
+     * @abstract
+     * @param  string $className
+     * @param  array $arguments
+     * @return mixed
+     */
+    public function createInstance($className, $arguments = null);
+
 }

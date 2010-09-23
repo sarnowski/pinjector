@@ -123,8 +123,12 @@ class DefaultKernel implements Kernel {
             $sourceClass = $binding->getTargetClassName();
         }
 
+        return $this->instantiate($sourceClass);
+    }
+
+    private function instantiate($className, $parameters = null) {
         // get weaved class definition
-        $weavedClassName = $this->weaver->weave($sourceClass);
+        $weavedClassName = $this->weaver->weave($className);
         $weavedClass = new ReflectionClass($weavedClassName);
 
         // do the injection magic
@@ -133,26 +137,33 @@ class DefaultKernel implements Kernel {
         $class = $weavedClass->getMethod("superClass")->invoke(null);
 
         // prepare constructor injection
-        $constructor = $class->getConstructor();
-        $parameters = $this->getDependencies($constructor);
+        if ($parameters == null) {
+            $injection = true;
+            $constructor = $class->getConstructor();
+            $parameters = $this->getDependencies($constructor);
+        } else {
+            $injection = false;
+        }
 
         // instantiate!
         $instance = $weavedClass->newInstanceArgs(array($this, $parameters));
 
         // do method injection
-        foreach ($class->getMethods() as $method) {
-            // does it have an @optional?
-            if (!is_null(DocParser::parseSetting($method->getDocComment(), 'optional'))) {
-                $parameters = $this->getDependencies($method, true);
-                $call = true;
-                foreach ($parameters as $parameter) {
-                    if ($parameter == null) {
-                        $call = false;
-                        break;
+        if ($injection) {
+            foreach ($class->getMethods() as $method) {
+                // does it have an @optional?
+                if (!is_null(DocParser::parseSetting($method->getDocComment(), 'optional'))) {
+                    $parameters = $this->getDependencies($method, true);
+                    $call = true;
+                    foreach ($parameters as $parameter) {
+                        if ($parameter == null) {
+                            $call = false;
+                            break;
+                        }
                     }
-                }
-                if ($call) {
-                    $method->invokeArgs($instance, $parameters);
+                    if ($call) {
+                        $method->invokeArgs($instance, $parameters);
+                    }
                 }
             }
         }
@@ -223,5 +234,12 @@ class DefaultKernel implements Kernel {
 
     public function install(Module $module) {
         $this->binder->install($module);
+    }
+
+    public function createInstance($className, $arguments = null) {
+        if ($arguments == null) {
+            $arguments = array();
+        }
+        return $this->instantiate($className, $arguments);
     }
 }
