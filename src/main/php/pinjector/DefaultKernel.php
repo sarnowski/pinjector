@@ -27,17 +27,20 @@ require_once('KernelException.php');
 require_once('Module.php');
 
 /**
- * Default kernel implementation.
+ * Default kernel implementation. Provides a factory method
+ * to bootstrap a {@link Kernel}.
  *
+ * @package pinjector
  * @author Tobias Sarnowski
+ * @since 1.0
  */
 class DefaultKernel implements Kernel {
 
     /**
-     * Boots the application.
+     * Boots the kernel with the given {@link Module}.
      *
      * @static
-     * @param  Module $applicationModule the bootstrap object
+     * @param Module $applicationModule the initial module to use for configuration
      * @return Kernel the booted kernel
      */
     public static function boot(Module $applicationModule) {
@@ -64,6 +67,7 @@ class DefaultKernel implements Kernel {
     private $registry;
 
     /**
+     * @access private
      * @private
      */
     function __construct() {
@@ -76,12 +80,16 @@ class DefaultKernel implements Kernel {
     }
 
     /**
+     * @access private
      * @return DefaultBinder the used binder
      */
     public function getBinder() {
         return $this->binder;
     }
 
+    /**
+     * @access private
+     */
     public function getInstance($className, $annotation = null, $allowNull = false) {
         $binding = $this->binder->getBinding($className, $annotation);
         if (is_null($binding) && !$allowNull) {
@@ -111,6 +119,9 @@ class DefaultKernel implements Kernel {
         return $instance;
     }
 
+    /**
+     * @access private
+     */
     private function newInstance(DefaultBinding $binding) {
         if (!is_null($binding->getSourceInstance())) {
             return $binding->getSourceInstance();
@@ -141,6 +152,9 @@ class DefaultKernel implements Kernel {
         return $this->instantiate($sourceClass);
     }
 
+    /**
+     * @access private
+     */
     private function instantiate($className, $parameters = null) {
         // get weaved class definition
         $weavedClassName = $this->weaver->weave($className);
@@ -186,6 +200,9 @@ class DefaultKernel implements Kernel {
         return $instance;
     }
 
+    /**
+     * @access private
+     */
     private function getDependencies(&$method, $optionals = false) {
         $parameters = array();
         if (!empty($method)) {
@@ -211,6 +228,9 @@ class DefaultKernel implements Kernel {
         return $parameters;
     }
 
+    /**
+     * @access private
+     */
     private function getInjectionDefinitions(&$method) {
         $doc = $method->getDocComment();
         if (empty($doc)) {
@@ -247,10 +267,16 @@ class DefaultKernel implements Kernel {
         return $defs;
     }
 
+    /**
+     * @access private
+     */
     public function install(Module $module) {
         $this->binder->install($module);
     }
 
+    /**
+     * @access private
+     */
     public function createInstance($className, $arguments = null) {
         if ($arguments == null) {
             $arguments = array();

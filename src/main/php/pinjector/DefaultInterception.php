@@ -19,8 +19,12 @@ require_once('Interception.php');
 
 
 /**
+ * An interception configuration.
  *
+ * @access private
+ * @package pinjector
  * @author Tobias Sarnowski
+ * @since 1.0
  */
 class DefaultInterception implements Interception {
 

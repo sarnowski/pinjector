@@ -18,8 +18,11 @@
 
 
 /**
+ * A utility to parse PHP comments for annotations.
  *
+ * @package pinjector
  * @author Tobias Sarnowski
+ * @since 1.0
  */ 
 class DocParser {
 
@@ -32,8 +35,8 @@ class DocParser {
      *
      *  Returns the trailing strings or null if not found.
      *
-     * @param  string $comment
-     * @param  string $key
+     * @param string $comment
+     * @param string $key
      * @return array
      */
     public static function parseSettings($comment, $key) {
@@ -59,8 +62,8 @@ class DocParser {
      * Same as parseSettings just returning one line or null
      * if no keyline was found.
      *
-     * @param  string $comment
-     * @param  string $key
+     * @param string $comment
+     * @param string $key
      * @return string
      */
     public static function parseSetting($comment, $key) {

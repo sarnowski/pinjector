@@ -21,8 +21,12 @@ require_once('DefaultSilentRegistryCallback.php');
 
 
 /**
+ * Default implementation of a {@link Registry}.
  *
+ * @access private
+ * @package pinjector
  * @author Tobias Sarnowski
+ * @since 1.0
  */ 
 class DefaultRegistry implements Registry {
 

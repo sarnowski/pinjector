@@ -20,8 +20,13 @@ require_once('Module.php');
 
 
 /**
+ * Utility class which only presents all {@link Binder} methods
+ * directly from its own.
  *
+ * @package pinjector
  * @author Tobias Sarnowski
+ * @since 1.0
+ * @see Binder
  */ 
 abstract class AbstractModule implements Module, Binder {
 
@@ -30,14 +35,25 @@ abstract class AbstractModule implements Module, Binder {
      */
     private $binder;
 
+    /**
+     * @final
+     * @param Binder $binder
+     * @access private
+     */
     public function configure(Binder $binder) {
         $this->binder = $binder;
         $this->configuration();
     }
 
+    /**
+     * Will be called during the configuration phase. Your bindings
+     * go here.
+     */
     public abstract function configuration();
 
     /**
+     * Provides the underlying {@link Binder}.
+     *
      * @return Binder
      */
     public function binder() {

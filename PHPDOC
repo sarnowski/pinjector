@@ -1,0 +1,7 @@
+To generate a developer documentation, run phpdoc
+like this:
+
+phpdoc	-ti "pinjector" \
+	-d src/main/php \
+	-t target/phpdocs \
+	-dn "pinjector"

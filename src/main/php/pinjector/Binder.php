@@ -24,7 +24,10 @@ require_once('Registration.php');
 /**
  * Utility to define bindings.
  *
+ * @package pinjector
  * @author Tobias Sarnowski
+ * @since 1.0
+ * @see Module
  */
 interface Binder {
 
@@ -41,7 +44,7 @@ interface Binder {
      * Creates a new binding.
      *
      * @abstract
-     * @param  string $className
+     * @param string $className
      * @return Binding
      */
     public function bind($className);
@@ -51,8 +54,8 @@ interface Binder {
      * Register an interception handler.
      *
      * @abstract
-     * @param  string $className
-     * @param  string $annotation
+     * @param string $className
+     * @param string $annotation
      * @return Interception
      */
     public function interceptWith($className, $annotation = null);
@@ -61,7 +64,7 @@ interface Binder {
      * Creates a registration for the given key.
      *
      * @abstract
-     * @param  string $registryKey
+     * @param string $registryKey
      * @return Registration
      */
     public function register($registryKey);

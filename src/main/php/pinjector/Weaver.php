@@ -19,8 +19,12 @@ require_once('WeavingException.php');
 
 
 /**
+ * Defines the AOP weaver which can weave a class definition
+ * on request.
  *
+ * @package pinjector
  * @author Tobias Sarnowski
+ * @since 1.0
  */ 
 interface Weaver {
 

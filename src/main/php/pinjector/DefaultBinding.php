@@ -21,8 +21,12 @@ require_once('DefaultRequestScope.php');
 require_once('DefaultSessionScope.php');
 
 /**
- * 
+ * Keeps track of a binding statement.
+ *
+ * @access private
+ * @package pinjector
  * @author Tobias Sarnowski
+ * @since 1.0
  */
 class DefaultBinding implements Binding {
 

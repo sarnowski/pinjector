@@ -19,9 +19,11 @@ require_once('Pointcut.php');
 
 
 /**
- * Describes an interception configuration
+ * Describes an interception configuration.
  *
+ * @package pinjector
  * @author Tobias Sarnowski
+ * @since 1.0
  */ 
 interface Interception {
 

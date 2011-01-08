@@ -16,13 +16,16 @@
  */
 
 /**
+ * Defines an interception chain for method interception.
  * 
+ * @package pinjector
  * @author Tobias Sarnowski
+ * @since 1.0
  */
 interface InterceptionChain {
 
     /**
-     * Proceed with the execution.
+     * Proceed with the method execution.
      *
      * @abstract
      * @return mixed

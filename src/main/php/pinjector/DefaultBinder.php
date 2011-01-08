@@ -24,8 +24,12 @@ require_once('Module.php');
 require_once('Registry.php');
 
 /**
+ * Keeps track of all configurations made during the configuration phase.
  *
+ * @access private
+ * @package pinjector
  * @author Tobias Sarnowski
+ * @since 1.0
  */
 class DefaultBinder implements Binder {
 

@@ -18,8 +18,12 @@
 
 
 /**
+ * Implement this to get called for every registry entry you request.
  *
+ * @package pinjector
  * @author Tobias Sarnowski
+ * @since 1.0
+ * @see Registry
  */
 interface RegistryCallback {
 
@@ -27,7 +31,7 @@ interface RegistryCallback {
      * Will be called for each entry of the key in the registry.
      *
      * @abstract
-     * @param  mixed $object
+     * @param mixed $object
      * @return boolean if the loop has to go on
      */
     public function process($object);

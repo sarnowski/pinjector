@@ -19,8 +19,12 @@ require_once('RegistryCallback.php');
 
 
 /**
+ * A callback which ignores exceptions.
  *
+ * @access private
+ * @package pinjector
  * @author Tobias Sarnowski
+ * @since 1.0
  */ 
 class DefaultSilentRegistryCallback implements RegistryCallback {
 

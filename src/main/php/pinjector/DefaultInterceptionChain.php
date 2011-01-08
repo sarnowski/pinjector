@@ -18,8 +18,12 @@
 require_once('InterceptionChain.php');
 
 /**
+ * Provides the {@link InterceptionChain}.
  *
+ * @access private
+ * @package pinjector
  * @author Tobias Sarnowski
+ * @since 1.0
  */ 
 class DefaultInterceptionChain implements InterceptionChain {
 

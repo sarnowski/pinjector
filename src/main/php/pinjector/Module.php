@@ -18,17 +18,20 @@
 require_once('Binder.php');
 
 /**
- * Defines the bindings.
+ * Modules configure their bindings and the whole application
+ * composition.
  *
+ * @package pinjector
  * @author Tobias Sarnowski
+ * @since 1.0
  */
 interface Module {
 
     /**
-     * Will be called to configure a module.
+     * Will be called to configure the application.
      *
      * @abstract
-     * @param  Binder $binder the binder to use
+     * @param Binder $binder the binder to use
      * @return void
      */
     public function configure(Binder $binder);

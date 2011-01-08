@@ -18,8 +18,11 @@
 require_once('InterceptionChain.php');
 
 /**
+ * Defines how to implement an interceptor for AOP.
  * 
+ * @package pinjector
  * @author Tobias Sarnowski
+ * @since 1.0
  */
 interface Interceptor {
 

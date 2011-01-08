@@ -16,8 +16,12 @@
  */
 
 /**
+ * Basic exceptions which will be thrown when something goes wrong
+ * within the {@link Kernel}'s logic.
  * 
+ * @package pinjector
  * @author Tobias Sarnowski
+ * @since 1.0
  */
 class KernelException extends Exception {
 

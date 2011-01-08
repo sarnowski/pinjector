@@ -16,8 +16,11 @@
  */
 
 /**
+ * Core definition for direct interaction with the pinjector library.
  * 
+ * @package pinjector
  * @author Tobias Sarnowski
+ * @since 1.0
  */
 interface Kernel {
 
@@ -25,8 +28,8 @@ interface Kernel {
      * Returns an instance of the given classname.
      *
      * @abstract
-     * @param  string $className the classname
-     * @param  string $annotation the annotation to use
+     * @param string $className the classname
+     * @param string $annotation the annotation to use
      * @return mixed the requested instance
      */
     public function getInstance($className, $annotation = null);
@@ -44,8 +47,8 @@ interface Kernel {
      * Instantiates an object of the given classname with the given arguments.
      *
      * @abstract
-     * @param  string $className
-     * @param  array $arguments
+     * @param string $className
+     * @param array $arguments
      * @return mixed
      */
     public function createInstance($className, $arguments = null);

@@ -18,8 +18,11 @@
 require_once('KernelException.php');
 
 /**
+ * Will be thrown if something goes wrong during class weaving.
  *
+ * @package pinjector
  * @author Tobias Sarnowski
+ * @since 1.0
  */ 
 class WeavingException extends KernelException {
 

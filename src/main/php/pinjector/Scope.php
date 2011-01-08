@@ -18,8 +18,11 @@
 
 
 /**
+ * Defines a scope implementation.
  *
+ * @package pinjector
  * @author Tobias Sarnowski
+ * @since 1.0
  */
 interface Scope {
 
@@ -27,8 +30,8 @@ interface Scope {
      * Stores an instantiated binding in the scope.
      *
      * @abstract
-     * @param  string $key
-     * @param  mixed $value
+     * @param mixed $key
+     * @param mixed $value
      * @return void
      */
     public function putScope($key, $value);
@@ -37,7 +40,7 @@ interface Scope {
      * Returns the stored instance or null if instance not found.
      *
      * @abstract
-     * @param  string $key
+     * @param mixed $key
      * @return mixed
      */
     public function getScope($key);

@@ -19,8 +19,12 @@ require_once('RegistryCallback.php');
 
 
 /**
+ * A registry to store and retrieve objects during runtime. Can be used
+ * for publish/subscribe algorithms.
  *
+ * @package pinjector
  * @author Tobias Sarnowski
+ * @since 1.0
  */ 
 interface Registry {
 
@@ -28,8 +32,8 @@ interface Registry {
      * Registers an object instance to the key in the registry.
      *
      * @abstract
-     * @param  mixed $key
-     * @param  mixed $instance
+     * @param mixed $key
+     * @param mixed $instance
      * @return void
      */
     public function register($key, $instance);
@@ -38,9 +42,9 @@ interface Registry {
      * Registers a binding to the key in the registry.
      *
      * @abstract
-     * @param  mixed $key
-     * @param  string $binding
-     * @param  string $annotation
+     * @param mixed $key
+     * @param string $binding
+     * @param string $annotation
      * @return void
      */
     public function registerBinding($key, $binding, $annotation = null);
@@ -49,8 +53,8 @@ interface Registry {
      * Unregisters an instance from the registry.
      *
      * @abstract
-     * @param  mixed $key
-     * @param  mixed $instance
+     * @param mixed $key
+     * @param mixed $instance
      * @return void
      */
     public function unregister($key, $instance);
@@ -59,9 +63,9 @@ interface Registry {
      * Unregisters a binding from the registry.
      *
      * @abstract
-     * @param  $key
-     * @param  $binding
-     * @param  $annotation
+     * @param mixed $key
+     * @param string $binding
+     * @param string $annotation
      * @return void
      */
     public function unregisterBinding($key, $binding, $annotation = null);
@@ -70,7 +74,7 @@ interface Registry {
      * Returns an array of all registered objects matching the key.
      *
      * @abstract
-     * @param  mixed $key
+     * @param mixed $key
      * @return array
      */
     public function get($key);
@@ -79,8 +83,8 @@ interface Registry {
      * Calls the callback for every found entry in the registry.
      *
      * @abstract
-     * @param  mixed $key
-     * @param  RegistryCallback $callback
+     * @param mixed $key
+     * @param RegistryCallback $callback
      * @return boolean if no module stopped the loop
      */
     public function call($key, RegistryCallback $callback);
@@ -90,8 +94,8 @@ interface Registry {
      * ignores exceptions during execution.
      *
      * @abstract
-     * @param  mixed $key
-     * @param  RegistryCallback $callback
+     * @param mixed $key
+     * @param RegistryCallback $callback
      * @return boolean if no module stopped the loop
      */
     public function callSilent($key, RegistryCallback $callback);

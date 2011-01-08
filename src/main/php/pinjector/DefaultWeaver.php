@@ -22,8 +22,12 @@ require_once('Weaver.php');
 require_once('WeavingException.php');
 
 /**
+ * A AOP weaver implementation.
  *
+ * @access private
+ * @package pinjector
  * @author Tobias Sarnowski
+ * @since 1.0
  */ 
 class DefaultWeaver implements Weaver {
 

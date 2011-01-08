@@ -18,8 +18,12 @@
 require_once('Scope.php');
 
 /**
+ * A SessionScope implementation.
  *
+ * @access private
+ * @package pinjector
  * @author Tobias Sarnowski
+ * @since 1.0
  */ 
 class DefaultSessionScope implements Scope {
 

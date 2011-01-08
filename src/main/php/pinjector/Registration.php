@@ -18,8 +18,11 @@
 
 
 /**
+ * Defines a registry registration.
  *
+ * @package pinjector
  * @author Tobias Sarnowski
+ * @since 1.0
  */
 interface Registration {
 
@@ -27,8 +30,8 @@ interface Registration {
      * Connects the registration with a binding.
      *
      * @abstract
-     * @param  string $className
-     * @param  string $annotation
+     * @param string $className
+     * @param string $annotation
      * @return void
      */
     public function to($className, $annotation = null);
@@ -37,7 +40,7 @@ interface Registration {
      * Connects the registration with an instanced object.
      *
      * @abstract
-     * @param  mixed $instance
+     * @param mixed $instance
      * @return void
      */
     public function toInstance($instance);

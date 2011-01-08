@@ -18,8 +18,12 @@
 require_once('Scope.php');
 
 /**
+ * A request scope implementation.
  *
+ * @access private
+ * @package pinjector
  * @author Tobias Sarnowski
+ * @since 1.0
  */ 
 class DefaultRequestScope implements Scope {
 

@@ -20,15 +20,17 @@
 /**
  * Defines the matching logic of a pointcut.
  *
+ * @package pinjector
  * @author Tobias Sarnowski
+ * @since 1.0
  */
 interface Pointcut {
 
     /**
-     * Tests a given method if this pointcut matches it.
+     * Tests a given method if the pointcut matches it.
      *
      * @abstract
-     * @param  ReflectionMethod $method the method to test against
+     * @param ReflectionMethod $method the method to test against
      * @return boolean
      */
     public function matchesMethod(ReflectionMethod &$method);

@@ -18,8 +18,12 @@
 require_once('KernelException.php');
 
 /**
+ * Will be thrown if the configuration modules do a mistake or
+ * non-existing bindings are requested.
  * 
+ * @package pinjector
  * @author Tobias Sarnowski
+ * @since 1.0
  */
 class ConfigurationException extends KernelException {
 

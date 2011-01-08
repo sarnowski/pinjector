@@ -16,8 +16,13 @@
  */
 
 /**
- * 
+ * Represents one binding configuration, created with the {@link Binder}
+ * during the configuration phase.
+ *
+ * @package pinjector
  * @author Tobias Sarnowski
+ * @since 1.0
+ * @see Binder
  */
 interface Binding {
 
@@ -32,10 +37,10 @@ interface Binding {
     public function to($className, $annotation = null);
 
     /**
-     * Gives an already instantiated implementation.
+     * Binds an already instantiated implementation.
      *
      * @abstract
-     * @param  $ref
+     * @param mixed $ref
      * @return void
      */
     public function toInstance($ref);
@@ -44,16 +49,16 @@ interface Binding {
      * Adds an annotation to the binding.
      *
      * @abstract
-     * @param  $annotation
+     * @param string $annotation
      * @return Binding
      */
     public function annotatedWith($annotation);
 
     /**
-     * Defines the scope of the binding, requires a Scope instance.
+     * Defines the scope of the binding.
      *
      * @abstract
-     * @param  Scope $scope
+     * @param string $scope
      * @return void
      */
     public function in($scope);
@@ -67,7 +72,7 @@ interface Binding {
     public function inNoScope();
 
     /**
-     * Shortcut for binding in request scope.
+     * Shortcut for binding in request scope. This is the default binding.
      *
      * @abstract
      * @return void
