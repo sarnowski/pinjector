@@ -64,6 +64,10 @@ abstract class AbstractModule implements Module, Binder {
         return $this->binder->bind($className);
     }
 
+    public function bindScope($className) {
+        return $this->binder->bindScope($className);
+    }
+
     public function install(Module $module) {
         $this->binder->install($module);
     }
