@@ -49,6 +49,14 @@ interface Binder {
      */
     public function bind($className);
 
+    /**
+     * Creates a new scope binding.
+     *
+     * @abstract
+     * @param string $className
+     * @return Binding
+     */
+    public function bindScope($className);
 
     /**
      * Register an interception handler.

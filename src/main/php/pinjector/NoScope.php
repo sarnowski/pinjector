@@ -15,28 +15,16 @@
  * limitations under the License.
  */
 
-require_once('RequestScope.php');
+require_once('Scope.php');
+
 
 /**
- * A request scope implementation.
+ * This scope does not scope anything.
  *
- * @access private
  * @package pinjector
  * @author Tobias Sarnowski
  * @since 1.0
- */ 
-class DefaultRequestScope implements RequestScope {
+ */
+interface NoScope extends Scope {
 
-    private $instances = array();
-
-    public function getScope($key) {
-        if (!isset($this->instances[$key])) {
-            return null;
-        }
-        return $this->instances[$key];
-    }
-
-    public function putScope($key, $value) {
-        $this->instances[$key] = $value;
-    }
 }

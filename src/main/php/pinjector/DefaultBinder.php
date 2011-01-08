@@ -22,6 +22,7 @@ require_once('DefaultInterception.php');
 require_once('DefaultRegistration.php');
 require_once('Module.php');
 require_once('Registry.php');
+require_once('Scope.php');
 
 /**
  * Keeps track of all configurations made during the configuration phase.
@@ -82,7 +83,7 @@ class DefaultBinder implements Binder {
 
     public function install(Module $module) {
         if ($module == null) {
-            throw new ConfigurationException("module is null");
+            throw new ConfigurationException("Given module is null.");
         }
         $module->configure($this);
 
@@ -104,12 +105,24 @@ class DefaultBinder implements Binder {
     }
 
     public function bind($className) {
+        if (!is_class($className)) {
+            throw new ConfigurationException('Given target binding "'.$className.'" is not a class.');
+        }
+
         $binding = new DefaultBinding($className);
         if (!isset($this->bindings[$binding->getTargetClassName()])) {
             $this->bindings[$binding->getTargetClassName()] = array();
         }
         $this->bindings[$binding->getTargetClassName()][] = $binding;
         return $binding;
+    }
+
+    public function bindScope($className) {
+        if (!is_class($className, 'Scope')) {
+            throw new ConfigurationException('Given scope "'.$className.'" is not a Scope class.');
+        }
+
+        return $this->bind($className);
     }
 
     public function interceptWith($className, $annotation = null) {

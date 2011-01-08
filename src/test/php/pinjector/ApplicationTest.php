@@ -44,6 +44,14 @@ class ApplicationTest extends PHPUnit_Framework_TestCase {
         $helper2 = $kernel->getInstance('Helper', 'alternative2');
         $this->assertNotNull($helper2, 'helper2 is null');
 
+        $helper3 = $kernel->getInstance('StatefulTestHelper');
+        $this->assertNotNull($helper3, 'helper3 is null');
+        $helper3->setPrefix('blub');
+        $this->assertTrue($helper3->getPrefix() == 'blub', 'State not saved');
+        $helper3another = $kernel->getInstance('StatefulTestHelper');
+        $this->assertNotNull($helper3another, 'helper3 is null');
+        $this->assertFalse($helper3another->getPrefix() == 'blub', 'helper3another should be another instance');
+
         try {
             $this->assertEquals('Hello World', $helper->generateHello('World'), "wrong message");
             $this->assertTrue(false, "previous method call should throw an exception");

@@ -15,28 +15,25 @@
  * limitations under the License.
  */
 
-require_once('RequestScope.php');
+require_once('Helper.php');
 
 /**
- * A request scope implementation.
  *
- * @access private
- * @package pinjector
  * @author Tobias Sarnowski
- * @since 1.0
  */ 
-class DefaultRequestScope implements RequestScope {
+class StatefulTestHelper {
 
-    private $instances = array();
+    private $prefix = 'Hello ';
 
-    public function getScope($key) {
-        if (!isset($this->instances[$key])) {
-            return null;
-        }
-        return $this->instances[$key];
+    function setPrefix($prefix) {
+        $this->prefix = $prefix;
     }
 
-    public function putScope($key, $value) {
-        $this->instances[$key] = $value;
+    function getPrefix() {
+        return $this->prefix;
+    }
+
+    public function __toString() {
+        return '{StatefulTestHelper}';
     }
 }

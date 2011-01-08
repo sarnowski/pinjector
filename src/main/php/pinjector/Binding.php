@@ -15,6 +15,9 @@
  * limitations under the License.
  */
 
+require_once('NoScope.php');
+require_once('RequestScope.php');
+
 /**
  * Represents one binding configuration, created with the {@link Binder}
  * during the configuration phase.
@@ -61,7 +64,7 @@ interface Binding {
      * @param string $scope
      * @return void
      */
-    public function in($scope);
+    public function in($scope, $annotation = null);
 
     /**
      * Shortcut for binding in no scope.
@@ -78,13 +81,5 @@ interface Binding {
      * @return void
      */
     public function inRequestScope();
-
-    /**
-     * Shortcut for binding in session scope.
-     *
-     * @abstract
-     * @return void
-     */
-    public function inSessionScope();
 
 }

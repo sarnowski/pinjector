@@ -17,24 +17,14 @@
 
 require_once('Scope.php');
 
+
 /**
- * A SessionScope implementation.
+ * Scoped instances are available during one request.
  *
- * @access private
  * @package pinjector
  * @author Tobias Sarnowski
  * @since 1.0
- */ 
-class DefaultSessionScope implements Scope {
+ */
+interface RequestScope extends Scope {
 
-    public function getScope($key) {
-        if (!isset($_SESSION[$key])) {
-            return null;
-        }
-        return $_SESSION[$key];
-    }
-
-    public function putScope($key, $value) {
-        $_SESSION[$key] = $value;
-    }
 }

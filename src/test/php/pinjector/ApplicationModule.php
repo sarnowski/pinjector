@@ -21,6 +21,7 @@ require_once('Application.php');
 require_once('Helper.php');
 require_once('TestApplication.php');
 require_once('TestHelper.php');
+require_once('StatefulTestHelper.php');
 require_once('TestInterceptor.php');
 require_once('TestPointcut.php');
 
@@ -31,14 +32,16 @@ require_once('TestPointcut.php');
 class ApplicationModule implements Module {
 
     public function configure(Binder $binder) {
-        $binder->bind('Helper')->to('TestHelper')->inRequestScope();
+        $binder->bind('Helper')->to('TestHelper');
 
         $helper = new TestHelper();
         $helper->setPrefix('Hi ');
         $binder->bind('Helper')->annotatedWith('alternative')->toInstance($helper);
         $binder->bind('Helper')->annotatedWith('alternative2')->to('Helper', 'alternative');
 
-        $binder->bind('Application')->to('TestApplication')->inRequestScope();
+        $binder->bind('StatefulTestHelper')->inNoScope();
+
+        $binder->bind('Application')->to('TestApplication');
 
         $binder->bind('TestInterceptor')->inRequestScope();
         $binder->interceptWith('TestInterceptor')->on(new TestPointcut());

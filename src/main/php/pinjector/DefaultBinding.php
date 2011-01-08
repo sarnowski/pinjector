@@ -17,8 +17,7 @@
 
 require_once('Binding.php');
 require_once('ConfigurationException.php');
-require_once('DefaultRequestScope.php');
-require_once('DefaultSessionScope.php');
+require_once('Scope.php');
 
 /**
  * Keeps track of a binding statement.
@@ -29,14 +28,6 @@ require_once('DefaultSessionScope.php');
  * @since 1.0
  */
 class DefaultBinding implements Binding {
-
-    private static $requestScope;
-    private static $sessionScope;
-
-    static function initializeScopes() {
-        self::$requestScope = new DefaultRequestScope();
-        self::$sessionScope = new DefaultSessionScope();
-    }
 
     /**
      * @var string
@@ -68,25 +59,34 @@ class DefaultBinding implements Binding {
      */
     private $scope;
 
+    /**
+     * @var string
+     */
+    private $scopeAnnotation;
+
 
     function __construct($className) {
         $this->targetAnnotation = null;
         $this->sourceClassName = null;
         $this->sourceAnnotation = null;
         $this->sourceInstance = null;
-        $this->scope = null;
+        $this->scope = 'RequestScope';
+        $this->scopeAnnotation = null;
 
         $this->targetClassName = $className;
     }
 
     private function checkAlreadySet() {
         if (!is_null($this->sourceClassName) || !is_null($this->sourceInstance)) {
-            throw new ConfigurationException("binding already configured to another source");
+            throw new ConfigurationException("Binding already configured to another source");
         }
     }
 
     public function to($className, $annotation = null) {
         $this->checkAlreadySet();
+        if (!is_class($className, $this->targetClassName)) {
+            throw new ConfigurationException('Given source binding "'.$className.'" is not a subclass of the target binding "'.$this->targetClassName.'".');
+        }
         $this->sourceClassName = $className;
         $this->sourceAnnotation = $annotation;
         return $this;
@@ -94,6 +94,9 @@ class DefaultBinding implements Binding {
 
     public function toInstance($ref) {
         $this->checkAlreadySet();
+	if (!is_class($ref, $this->targetClassName)) {
+            throw new ConfigurationException('Given source instance "'.get_class($ref).'" is not a subclass of the target binding "'.$this->targetClassName.'".');
+        }
         $this->sourceInstance = $ref;
     }
 
@@ -134,30 +137,34 @@ class DefaultBinding implements Binding {
 
     public function annotatedWith($annotation) {
         if (!is_null($this->targetAnnotation)) {
-            throw new ConfigurationException("annotation already set");
+            throw new ConfigurationException("Annotation already set.");
         }
         $this->targetAnnotation = $annotation;
         return $this;
     }
 
-    public function in($scope) {
+    public function in($scope, $scopeAnnotation = null) {
+        if (!is_class($scope, 'Scope')) {
+            throw new ConfigurationException('Given scope "'.$scope.'" is not a Scope class.');
+        }
         $this->scope = $scope;
+        $this->scopeAnnotation = $scopeAnnotation;
     }
 
     public function inNoScope() {
-        $this->scope = null;
+        $this->scope = 'NoScope';
     }
 
     public function inRequestScope() {
-        $this->scope = self::$requestScope;
-    }
-
-    public function inSessionScope() {
-        $this->scope = self::$sessionScope;
+        $this->scope = 'RequestScope';
     }
 
     public function getScope() {
         return $this->scope;
+    }
+
+    public function getScopeAnnotation() {
+        return $this->scopeAnnotation;
     }
 
     public function getKey() {
@@ -172,10 +179,6 @@ class DefaultBinding implements Binding {
         return '{DefaultBinding'
                 .' targetClassName='.$this->targetClassName
                 .' targetAnnotation='.$this->targetAnnotation
-                .' '
                 .'}';
     }
 }
-
-// hack: initialize static content
-DefaultBinding::initializeScopes();

@@ -19,12 +19,15 @@ require_once('Binder.php');
 require_once('Binding.php');
 require_once('DefaultBinder.php');
 require_once('DefaultBinding.php');
+require_once('DefaultNoScope.php');
+require_once('DefaultRequestScope.php');
 require_once('DefaultRegistry.php');
 require_once('DefaultWeaver.php');
 require_once('DocParser.php');
 require_once('Kernel.php');
 require_once('KernelException.php');
 require_once('Module.php');
+require_once('utilities.php');
 
 /**
  * Default kernel implementation. Provides a factory method
@@ -45,7 +48,9 @@ class DefaultKernel implements Kernel {
      */
     public static function boot(Module $applicationModule) {
         $kernel = new DefaultKernel();
-        $kernel->getBinder()->bind('Kernel')->toInstance($kernel); // bind the kernel itself
+        // bind the kernel itself
+        $kernel->getBinder()->bind('Kernel')->toInstance($kernel);
+        // load the application module
         $kernel->getBinder()->install($applicationModule);
         return $kernel;
     }
@@ -75,6 +80,10 @@ class DefaultKernel implements Kernel {
         $this->binder = new DefaultBinder($this->registry);
         $this->weaver = new DefaultWeaver($this->binder);
 
+        // bind to default scopes (they will hardly get other implementations)
+        $this->binder->bindScope('NoScope')->toInstance(new DefaultNoScope());
+        $this->binder->bindScope('RequestScope')->toInstance(new DefaultRequestScope());
+
         $this->binder->bind('Registry')->toInstance($this->registry);
         $this->binder->bind('Weaver')->toInstance($this->weaver);
     }
@@ -102,17 +111,22 @@ class DefaultKernel implements Kernel {
             return null;
         }
 
-        // initialize if nessecary
-        $scope = $binding->getScope();
-        if (is_null($scope)) {
+        // instance bound? directly return
+        if (!is_null($binding->getSourceInstance())) {
+            return $binding->getSourceInstance();
+        }
+
+        // get the scope of the binding
+        $scope = $this->getInstance(
+            $binding->getScope(),
+            $binding->getScopeAnnotation());
+
+        // get from scope and if not available scope a new instance
+        $scopeKey = $binding->getKey();
+        $instance = $scope->getScope($scopeKey);
+        if (is_null($instance)) {
             $instance = $this->newInstance($binding);
-        } else {
-            $scopeKey = $binding->getKey();
-            $instance = $scope->getScope($scopeKey);
-            if (is_null($instance)) {
-                $instance = $this->newInstance($binding);
-                $scope->putScope($scopeKey, $instance);
-            }
+            $scope->putScope($scopeKey, $instance);
         }
 
         // return the proxied instance
