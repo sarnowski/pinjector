@@ -1,3 +1,4 @@
   * implement bindScope
   * implement non-constructor SessionScope
   * check bound classes against each other (interface -> implementation)
+  * use RequestScope as default scope
