@@ -8,7 +8,7 @@
 
     <groupId>com.github.sarnowski</groupId>
     <artifactId>pinjector</artifactId>
-    <version>0.6.1</version>
+    <version>0.7-SNAPSHOT</version>
 
     <name>pinjector</name>
 
