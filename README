@@ -1,7 +1,11 @@
 pinjector
 ================================================================================
 
-pinjector is a php IoC and AOP library.
+pinjector is a PHP dependency injection (DI) container library with aspect
+oriented programming (AOP) capabilities.
+
+Based on the idea of Google's Guice (http://code.google.com/p/google-guice/)
+this library brings the dependency injection concept to PHP applications.
 
 
 
@@ -10,13 +14,13 @@ Usage
 
 require_once('pinjector/DefaultKernel.php');
 
-$mod = new YourModuleImplementsModule();
+$mod = new MyModule();
 $kernel = DefaultKernel::boot($mod);
 
 $obj = $kernel->getInstance('YourBoundInterface');
 
 
-Binding
+Configuration
 ================================================================================
 
 require_once('pinjector/Module.php');
@@ -27,16 +31,39 @@ class MyModule implements Module {
     public function configure(Binder $binder) {
 
         // normal bindings
-        $binder->bind('MyInterface')->to('MyImplementation')->inRequestScope();
+        $binder->bind('MyInterface')->to('MyImplementation');
+
         $binder->bind('MyThirdInterface')
                 ->annotatedWith('alternative')
                 ->to('MyThirdImplementation')
-                ->inSessionScope();
+                ->inNoScope();
 
         // register interceptor for aop
-        $binder->bind('MySecondImplementation')->inRequestScope();
-        $binder->interceptWith('MySecondImplementation');
+        $binder->bind('MySecondImplementation');
+        $binder->interceptWith('MySecondImplementation')->on(new MyPointcut());
+
+        // install another module to get its bindings
+	$binder->install(new MyFeatureModule());
 
     }
 
 }
+
+
+License
+================================================================================
+
+Copyright 2010,2011 Tobias Sarnowski
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
