@@ -40,30 +40,20 @@ require_once('utilities.php');
 class DefaultKernel implements Kernel {
 
     /**
-     * Boots the kernel.
-     *
-     * @static
-     * @return Kernel the booted kernel
-     */
-    public static function boot() {
-        $kernel = new DefaultKernel();
-        // bind the kernel itself
-        $kernel->getBinder()->bind('Kernel')->toInstance($kernel);
-        return $kernel;
-    }
-
-    /**
      * Boots the kernel with the given {@link Module}.
      *
      * @static
      * @param Module $applicationModule the initial module to use for configuration
      * @return Kernel the booted kernel
      */
-    public static function boot(Module $applicationModule) {
-        // boot the kernel
-        $kernel = self::boot();
+    public static function boot($applicationModule = null) {
+        $kernel = new DefaultKernel();
+        // bind the kernel itself
+        $kernel->getBinder()->bind('Kernel')->toInstance($kernel);
         // load the application module
-        $kernel->install($applicationModule);
+	if (!is_null($applicationModule)) {
+            $kernel->install($applicationModule);
+        }
         return $kernel;
     }
 
